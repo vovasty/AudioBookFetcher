@@ -1,0 +1,118 @@
+{
+  "57357": {
+    "sTextAuthor": "  <div class=\"tooltip__wrapper \">\n    <a rel=\"author\" class=\"link__author\" href=\"https://akniga.org/author/%D0%9A%D1%83%D0%BA%20%D0%93%D0%BB%D0%B5%D0%BD/\">\n              <svg class=\"icon icon-author\" xmlns=\"http://www.w3.org/2000/svg\"><use xlink:href=\"#author\"></use></svg>\n            <span itemprop=\"author\">Кук Глен</span>\n    </a>\n    <div class=\"tooltip__main tooltip__main--top\">\n      \n       \n\n\n\n\n\n\n\n\n\n\n\n\n\n                \n    \n\n\n    \n\n\n<div class=\"ls-vote ls-vote-body ls-vote--count-positive ls-vote--not-voted ls-vote--default  js-vote-author\"  data-param-i-target-id=\"2110\" data-type=\"author\">\n    \n        \n                          \n              <div class=\"ls-vote-item ls-vote-item-up js-vote-item ls-counter \" title=\"\" data-vote-value=\"1\">\n                <svg class=\"icon\" xmlns=\"http://www.w3.org/2000/svg\"><use xlink:href=\"#like_empty\"></use></svg>\n                <span class=\"counter-number js-vote-rating-up\">104</span>\n              </div>\n\n              \n              <div class=\"ls-vote-item ls-vote-item-down js-vote-item ls-counter  lesszero\" title=\"\" data-vote-value=\"-1\">\n                <svg class=\"icon\" xmlns=\"http://www.w3.org/2000/svg\"><use xlink:href=\"#dislike_empty\"></use></svg>\n                <span class=\"counter-number js-vote-rating-down\">3</span>\n              </div>\n            \n        \n</div>\n\n    </div>\n  </div>\n",
+    "sTextPerformer": "  <div class=\"tooltip__wrapper \">\n    <a rel=\"performer\" class=\"link__reader\" href=\"https://akniga.org/performer/%D0%93%D0%BE%D0%BB%D0%BE%D0%B2%D0%B8%D0%BD%20%D0%9A%D0%B8%D1%80%D0%B8%D0%BB%D0%BB/\">\n              <svg class=\"icon icon-author\" xmlns=\"http://www.w3.org/2000/svg\"><use xlink:href=\"#performer\"></use></svg>\n            <span>Головин Кирилл</span>\n    </a>\n    <div class=\"tooltip__main tooltip__main--top\">\n      \n     \n\n\n\n\n\n\n\n\n\n\n\n\n\n                \n    \n\n\n    \n\n\n<div class=\"ls-vote ls-vote-body ls-vote--count-positive ls-vote--not-voted ls-vote--default  js-vote-performer\"  data-param-i-target-id=\"729\" data-type=\"performer\">\n    \n        \n                          \n              <div class=\"ls-vote-item ls-vote-item-up js-vote-item ls-counter \" title=\"\" data-vote-value=\"1\">\n                <svg class=\"icon\" xmlns=\"http://www.w3.org/2000/svg\"><use xlink:href=\"#like_empty\"></use></svg>\n                <span class=\"counter-number js-vote-rating-up\">1,7K</span>\n              </div>\n\n              \n              <div class=\"ls-vote-item ls-vote-item-down js-vote-item ls-counter  lesszero\" title=\"\" data-vote-value=\"-1\">\n                <svg class=\"icon\" xmlns=\"http://www.w3.org/2000/svg\"><use xlink:href=\"#dislike_empty\"></use></svg>\n                <span class=\"counter-number js-vote-rating-down\">52</span>\n              </div>\n            \n        \n</div>\n\n    </div>\n  </div>\n",
+    "sTextFav": "\n\n\n\n\n\n\n\n\n    \n\n        \n<div class=\"ls-counter ls-favourite ls-favourite--has-counter ls-favourite--locked ls-favourite--guest ls-favourite--guest   \"\n     data-param-i-target-id=\"29556\"\n     data-type=\"topic\"\n     title=\"Добавить в избранное\"\n     >\n\n    \n      <svg class=\"icon icon-star\" xmlns=\"http://www.w3.org/2000/svg\"><use xmlns:xlink=\"http://www.w3.org/1999/xlink\" xlink:href=\"#star_empty\"></use></svg>\n      \n      <span class=\"counter-number ls-favourite-count js-favourite-count\" >\n        39\n      </span>\n</div>\n",
+    "items": [
+      {
+        "file": 1,
+        "title": "Суровые Времена - 01 Часть 1",
+        "time": 2903,
+        "duration": 2903,
+        "time_from_start": 0,
+        "time_finish": 2903
+      },
+      {
+        "file": 1,
+        "title": "Суровые Времена - 02 Часть 2",
+        "time": 6295,
+        "duration": 3392,
+        "time_from_start": 2903,
+        "time_finish": 6295
+      },
+      {
+        "file": 1,
+        "title": "Суровые Времена - 03 Часть 3",
+        "time": 9546,
+        "duration": 3251,
+        "time_from_start": 6295,
+        "time_finish": 9546
+      },
+      {
+        "file": 2,
+        "title": "Суровые Времена - 04 Часть 4",
+        "time": 12589,
+        "duration": 3043,
+        "time_from_start": 0,
+        "time_finish": 3043
+      },
+      {
+        "file": 2,
+        "title": "Суровые Времена - 05 Часть 5",
+        "time": 15686,
+        "duration": 3097,
+        "time_from_start": 3043,
+        "time_finish": 6140
+      },
+      {
+        "file": 2,
+        "title": "Суровые Времена - 06 Часть 6",
+        "time": 18839,
+        "duration": 3153,
+        "time_from_start": 6140,
+        "time_finish": 9293
+      },
+      {
+        "file": 3,
+        "title": "Суровые Времена - 07 Часть 7",
+        "time": 22350,
+        "duration": 3511,
+        "time_from_start": 0,
+        "time_finish": 3511
+      },
+      {
+        "file": 3,
+        "title": "Суровые Времена - 08 Часть 8",
+        "time": 25327,
+        "duration": 2977,
+        "time_from_start": 3511,
+        "time_finish": 6488
+      },
+      {
+        "file": 3,
+        "title": "Суровые Времена - 09 Часть 9",
+        "time": 28391,
+        "duration": 3064,
+        "time_from_start": 6488,
+        "time_finish": 9552
+      },
+      {
+        "file": 4,
+        "title": "Суровые Времена - 10 Часть 10",
+        "time": 31989,
+        "duration": 3598,
+        "time_from_start": 0,
+        "time_finish": 3598
+      },
+      {
+        "file": 4,
+        "title": "Суровые Времена - 11 Часть 11",
+        "time": 35213,
+        "duration": 3224,
+        "time_from_start": 3598,
+        "time_finish": 6822
+      },
+      {
+        "file": 4,
+        "title": "Суровые Времена - 12 Часть 12",
+        "time": 39557,
+        "duration": 4344,
+        "time_from_start": 6822,
+        "time_finish": 11166
+      }
+    ],
+    "key": "TJ3-dpYYUfFen7fZ8uK41g,,",
+    "topic_id": "29556",
+    "title": "Кук Глен - Суровые времена",
+    "titleonly": "Суровые времена",
+    "bookurl": "https://akniga.org/kuk-glen-surovye-vremena",
+    "preview": "https://akniga.org/uploads/media/topic/2020/08/05/10/preview/9062362c3c6eb74c1938_100x100crop.jpg",
+    "author": "Кук Глен",
+    "srv": "https://m17.akniga.club/",
+    "sMsgTitle": "",
+    "sMsg": "",
+    "bStateError": false,
+    "current_mfileId": 4,
+    "chapterId": 9
+  }
+}
