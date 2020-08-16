@@ -84,8 +84,7 @@ public class AudioBookFetcher {
             let minutes = remainder / 60
             let seconds = remainder % 60
             let microseconds = 0
-
-            return String(format: "%2d:%2d:%2d.%3d %@", hours, minutes, seconds, microseconds, t.1)
+            return String(format: "%02d:%02d:%02d.%03d %@", hours, minutes, seconds, microseconds, t.1)
         }
         let result = chapters.joined(separator: "\n")
         try result.data(using: .utf8)?.write(to: path)
