@@ -4,5 +4,6 @@
 
 ```shell
 swift run abookfetcher 'https://akniga.org/vnutrennie-teni' ~/Downloads/audiobooks
-m4b-tool --jobs=6 merge ~/Downloads/audionbooks/Вышегородский\ Вячеслав/Внутренние\ Тени --batch-pattern="audiobooks/%a/%n/
+cd ~/Downloads
+m4b-tool merge audiobooks/Вышегородский\ Вячеслав/Внутренние\ Тени --batch-pattern="audiobooks/%a/%n" --output-file=book.m4b --jobs=6
 ```
