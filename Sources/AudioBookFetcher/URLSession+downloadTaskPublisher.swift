@@ -11,7 +11,8 @@ import Foundation
 extension URLSession {
     final class DownloadTaskSubscription<SubscriberType: Subscriber>: Subscription where
         SubscriberType.Input == (url: URL, response: URLResponse),
-        SubscriberType.Failure == URLError {
+        SubscriberType.Failure == URLError
+    {
         private var subscriber: SubscriberType?
         private weak var session: URLSession!
         private var request: URLRequest!
@@ -75,7 +76,8 @@ extension URLSession {
 
         public func receive<S>(subscriber: S) where S: Subscriber,
             DownloadTaskPublisher.Failure == S.Failure,
-            DownloadTaskPublisher.Output == S.Input {
+            DownloadTaskPublisher.Output == S.Input
+        {
             let subscription = DownloadTaskSubscription(subscriber: subscriber, session: session, request: request)
             subscriber.receive(subscription: subscription)
         }

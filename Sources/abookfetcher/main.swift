@@ -28,6 +28,11 @@ struct Repeat: ParsableCommand {
     @Argument(help: "output path.")
     var path: String
 
+    enum CodingKeys: String, CodingKey {
+        case path, url
+    }
+
+    private var store = Set<AnyCancellable>()
     mutating func run() throws {
         guard let url = URL(string: url) else { throw Error.invalidURL }
 
@@ -40,7 +45,7 @@ struct Repeat: ParsableCommand {
         let loader: AKnigaLoader?
         do {
             let book = try serializer.load(url: url, type: AKnigaAudioBook.self)
-            publisher = fetcher(book: book, to: path).eraseToAnyPublisher()
+            publisher = fetcher(book: book, to: path)
             logger.info("loaded metadata")
             loader = nil
         } catch {
@@ -52,7 +57,8 @@ struct Repeat: ParsableCommand {
             }.eraseToAnyPublisher()
         }
 
-        let cancel = publisher
+        publisher
+            .print("")
             .sink { completion in
                 switch completion {
                 case let .failure(error):
@@ -73,6 +79,7 @@ struct Repeat: ParsableCommand {
                     logger.info("skipped cover: \(error.localizedDescription)")
                 }
             }
+            .store(in: &store)
         CFRunLoopRun()
     }
 }
