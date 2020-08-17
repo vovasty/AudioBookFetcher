@@ -33,6 +33,8 @@ struct Repeat: ParsableCommand {
     }
 
     private var store = Set<AnyCancellable>()
+    private var loader: AKnigaLoader?
+    
     mutating func run() throws {
         guard let url = URL(string: url) else { throw Error.invalidURL }
 
@@ -42,7 +44,6 @@ struct Repeat: ParsableCommand {
         let serializer = AudioBookSerializer(baseURL: baseURL)
         let fetcher = AudioBookFetcher()
         let publisher: AnyPublisher<AudioBookFetcher.FileType, Swift.Error>
-        let loader: AKnigaLoader?
         do {
             let book = try serializer.load(url: url, type: AKnigaAudioBook.self)
             publisher = fetcher(book: book, to: path)
@@ -58,7 +59,6 @@ struct Repeat: ParsableCommand {
         }
 
         publisher
-            .print("")
             .sink { completion in
                 switch completion {
                 case let .failure(error):
