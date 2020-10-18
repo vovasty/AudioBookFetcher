@@ -12,6 +12,10 @@ let package = Package(
             name: "AudioBookFetcher",
             targets: ["AudioBookFetcher"]
         ),
+        .library(
+            name: "SSWKURL",
+            targets: ["SSWKURL"]
+        ),
     ],
     dependencies: [
         .package(url: "https://github.com/scinfu/SwiftSoup", from: "2.0.0"),
@@ -38,6 +42,12 @@ let package = Package(
             name: "AKnigaTests",
             dependencies: ["AKniga", "AudioBookFetcher"],
             resources: [Resource.copy("Resources")]
+        ),
+
+        .target(
+            name: "SSWKURL",
+            dependencies: [
+            ]
         ),
     ]
 )
