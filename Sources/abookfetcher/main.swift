@@ -22,14 +22,17 @@ struct Repeat: ParsableCommand {
         case invalidURL
     }
 
-    @Argument(help: "an akniga.org book url.")
+    @Argument(help: "An akniga.org book url.")
     var url: String
 
-    @Argument(help: "output path.")
+    @Argument(help: "An output path.")
     var path: String
 
+    @Option(help: "A path pattern. \n%a - a book author\n%n - a book name.")
+    var pattern: String = "%a/%n/%n"
+
     enum CodingKeys: String, CodingKey {
-        case path, url
+        case path, url, pattern
     }
 
     private var store = Set<AnyCancellable>()
@@ -39,6 +42,7 @@ struct Repeat: ParsableCommand {
         guard let url = URL(string: url) else { throw Error.invalidURL }
 
         let path = self.path
+        let pattern = self.pattern
 
         let baseURL = URL(fileURLWithPath: path, isDirectory: true)
         let serializer = AudioBookSerializer(baseURL: baseURL)
@@ -46,7 +50,8 @@ struct Repeat: ParsableCommand {
         let publisher: AnyPublisher<AudioBookFetcher.FileType, Swift.Error>
         do {
             let book = try serializer.load(url: url, type: AKnigaAudioBook.self)
-            publisher = fetcher(book: book, to: path)
+            let pathFormatter = PathFormatter(baseURL: URL(fileURLWithPath: path), pattern: pattern, book: book)
+            publisher = fetcher(book: book, to: pathFormatter.bookURL)
             logger.info("loaded metadata")
             loader = nil
         } catch {
@@ -54,7 +59,8 @@ struct Repeat: ParsableCommand {
             loader = AKnigaLoader()
             publisher = loader!.load(url: url).flatMap { book -> AnyPublisher<AudioBookFetcher.FileType, Swift.Error> in
                 try? serializer.save(book: book, url: url)
-                return fetcher(book: book, to: path)
+                let pathFormatter = PathFormatter(baseURL: URL(fileURLWithPath: path), pattern: pattern, book: book)
+                return fetcher(book: book, to: pathFormatter.bookURL)
             }.eraseToAnyPublisher()
         }
 

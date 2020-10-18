@@ -62,10 +62,7 @@ public class AudioBookFetcher {
 
     public init() {}
 
-    private func createFolders<T>(book: AnyAudioBook<T>, to path: String) throws -> URL {
-        let basePath = URL(fileURLWithPath: path, isDirectory: true)
-        let bookPath = URL(fileURLWithPath: "\(book.author!)/\(book.name!)", isDirectory: true, relativeTo: basePath)
-
+    private func createFolders<T>(book: AnyAudioBook<T>, to bookPath: URL) throws -> URL {
         try FileManager.default.createDirectory(at: bookPath, withIntermediateDirectories: true, attributes: nil)
         return bookPath
     }
@@ -131,7 +128,7 @@ public class AudioBookFetcher {
         return audios.serialize()!
     }
 
-    public func callAsFunction<T>(book: AnyAudioBook<T>, to path: String) -> AnyPublisher<FileType, Error> {
+    public func callAsFunction<T>(book: AnyAudioBook<T>, to path: URL) -> AnyPublisher<FileType, Error> {
         let bookPath: URL
         do {
             bookPath = try createFolders(book: book, to: path)
