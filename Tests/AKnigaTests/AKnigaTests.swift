@@ -1,7 +1,7 @@
 @testable import AKniga
 import XCTest
 
-final class AudioBookFetcherTests: XCTestCase {
+final class AKnigaTests: XCTestCase {
     func testParse() throws {
         guard let htmlURL: URL = Bundle.module.url(forResource: "Resources/test-book", withExtension: "html") else { XCTFail(); return }
         guard let jsonURL: URL = Bundle.module.url(forResource: "Resources/test-book", withExtension: "json") else { XCTFail(); return }
@@ -27,7 +27,7 @@ final class AudioBookFetcherTests: XCTestCase {
     func testLoad() {
         let expectation = XCTestExpectation(description: "loader")
         let loader = AKnigaLoader()
-        let result = loader.load(url: URL(string: "https://akniga.org/kuk-glen-surovye-vremena")!)
+        _ = loader.load(url: URL(string: "https://akniga.org/kuk-glen-surovye-vremena")!)
             .breakpoint()
             .sink(receiveCompletion: { result in
                 switch result {
