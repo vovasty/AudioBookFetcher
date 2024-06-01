@@ -8,6 +8,6 @@ swift run abookfetcher 'https://akniga.org/vnutrennie-teni' ~/Downloads/audioboo
 
 # Brew
 ```
-brew tap vovast/tap
+brew tap vovasty/tap
 brew install audiobookfetcher
 ```
