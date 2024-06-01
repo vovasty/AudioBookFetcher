@@ -15,6 +15,7 @@ public protocol AudioBook {
     var chapters: [BookChapter] { get }
     var coverURL: URL { get }
     var content: AudioBookContent { get }
+    var performers: [String] { get }
 }
 
 public enum AudioBookContent {
@@ -124,6 +125,7 @@ public struct Fetcher {
         }
 
         buf.append("title=\(book.title)")
+        buf.append("album=\(book.title)")
 
         for chapter in book.chapters {
             buf.append("[CHAPTER]")
