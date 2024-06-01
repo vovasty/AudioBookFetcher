@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  WebViewSniffer.swift
 //
 //
 //  Created by Vladimir Solomenchuk on 5/31/24.

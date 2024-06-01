@@ -9,7 +9,10 @@ let package = Package(
         .macOS(.v14),
     ],
     products: [
-        .executable(name: "abookfetcher", targets: ["abookfetcher"]),
+        .library(
+            name: "AKniga",
+            targets: ["AKniga"]
+        ),
         .library(
             name: "AudioBookFetcher",
             targets: ["AudioBookFetcher"]
@@ -24,21 +27,32 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/scinfu/SwiftSoup", from: "2.0.0"),
+        .package(url: "https://github.com/scinfu/SwiftSoup", from: "2.7.0"),
         .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.4.0"),
+        .package(url: "https://github.com/apple/swift-log.git", from: "1.0.0"),
     ],
     targets: [
-        .target(
+        .executableTarget(
             name: "abookfetcher",
-            dependencies: ["AudioBookFetcher", "AKniga", .product(name: "ArgumentParser", package: "swift-argument-parser")]
+            dependencies: [
+                "AudioBookFetcher",
+                "AKniga",
+                .product(name: "ArgumentParser", package: "swift-argument-parser"),
+            ]
         ),
         .target(
             name: "AudioBookFetcher",
-            dependencies: []
+            dependencies: [
+                .product(name: "Logging", package: "swift-log"),
+            ]
         ),
         .target(
             name: "AKniga",
-            dependencies: ["SwiftSoup"]
+            dependencies: [
+                "WebViewSniffer",
+                "SwiftSoup",
+                "AudioBookFetcher",
+            ]
         ),
         .testTarget(
             name: "AudioBookFetcherTests",

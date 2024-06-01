@@ -1,33 +1,31 @@
 //
 //  PathFormatter.swift
-//  
+//
 //
 //  Created by Vladimir Solomenchuk on 10/18/20.
 //
 
 import Foundation
 
-public struct PathFormatter<T: BookChapter> {
-    public let baseURL: URL
-    public let pattern: String
-    public let book: AnyAudioBook<T>
-    
-    public init(baseURL: URL, pattern: String, book: AnyAudioBook<T>) {
-        self.baseURL = baseURL
+struct PathFormatter {
+    let base: String
+    let book: AudioBook
+
+    init(base: String, book: AudioBook) {
+        self.base = base
         self.book = book
-        self.pattern = pattern
     }
-    
-    public var bookURL: URL {
+
+    var path: URL {
         let dict = [
-            "%a": book.author ?? "",
-            "%n": book.name ?? ""
+            "@author": book.authors.first ?? "Unknown author",
+            "@title": book.title,
         ]
-        
-        let path = dict.reduce(pattern) {
+
+        let path = dict.reduce(base) {
             $0.replacingOccurrences(of: $1.key, with: $1.value)
         }
-        
-        return baseURL.appendingPathComponent(path, isDirectory: true)
+
+        return URL(fileURLWithPath: path)
     }
 }

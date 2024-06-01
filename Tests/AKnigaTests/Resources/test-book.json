@@ -1,118 +1,168 @@
 {
-  "57357": {
-    "sTextAuthor": "  <div class=\"tooltip__wrapper \">\n    <a rel=\"author\" class=\"link__author\" href=\"https://akniga.org/author/%D0%9A%D1%83%D0%BA%20%D0%93%D0%BB%D0%B5%D0%BD/\">\n              <svg class=\"icon icon-author\" xmlns=\"http://www.w3.org/2000/svg\"><use xlink:href=\"#author\"></use></svg>\n            <span itemprop=\"author\">Кук Глен</span>\n    </a>\n    <div class=\"tooltip__main tooltip__main--top\">\n      \n       \n\n\n\n\n\n\n\n\n\n\n\n\n\n                \n    \n\n\n    \n\n\n<div class=\"ls-vote ls-vote-body ls-vote--count-positive ls-vote--not-voted ls-vote--default  js-vote-author\"  data-param-i-target-id=\"2110\" data-type=\"author\">\n    \n        \n                          \n              <div class=\"ls-vote-item ls-vote-item-up js-vote-item ls-counter \" title=\"\" data-vote-value=\"1\">\n                <svg class=\"icon\" xmlns=\"http://www.w3.org/2000/svg\"><use xlink:href=\"#like_empty\"></use></svg>\n                <span class=\"counter-number js-vote-rating-up\">104</span>\n              </div>\n\n              \n              <div class=\"ls-vote-item ls-vote-item-down js-vote-item ls-counter  lesszero\" title=\"\" data-vote-value=\"-1\">\n                <svg class=\"icon\" xmlns=\"http://www.w3.org/2000/svg\"><use xlink:href=\"#dislike_empty\"></use></svg>\n                <span class=\"counter-number js-vote-rating-down\">3</span>\n              </div>\n            \n        \n</div>\n\n    </div>\n  </div>\n",
-    "sTextPerformer": "  <div class=\"tooltip__wrapper \">\n    <a rel=\"performer\" class=\"link__reader\" href=\"https://akniga.org/performer/%D0%93%D0%BE%D0%BB%D0%BE%D0%B2%D0%B8%D0%BD%20%D0%9A%D0%B8%D1%80%D0%B8%D0%BB%D0%BB/\">\n              <svg class=\"icon icon-author\" xmlns=\"http://www.w3.org/2000/svg\"><use xlink:href=\"#performer\"></use></svg>\n            <span>Головин Кирилл</span>\n    </a>\n    <div class=\"tooltip__main tooltip__main--top\">\n      \n     \n\n\n\n\n\n\n\n\n\n\n\n\n\n                \n    \n\n\n    \n\n\n<div class=\"ls-vote ls-vote-body ls-vote--count-positive ls-vote--not-voted ls-vote--default  js-vote-performer\"  data-param-i-target-id=\"729\" data-type=\"performer\">\n    \n        \n                          \n              <div class=\"ls-vote-item ls-vote-item-up js-vote-item ls-counter \" title=\"\" data-vote-value=\"1\">\n                <svg class=\"icon\" xmlns=\"http://www.w3.org/2000/svg\"><use xlink:href=\"#like_empty\"></use></svg>\n                <span class=\"counter-number js-vote-rating-up\">1,7K</span>\n              </div>\n\n              \n              <div class=\"ls-vote-item ls-vote-item-down js-vote-item ls-counter  lesszero\" title=\"\" data-vote-value=\"-1\">\n                <svg class=\"icon\" xmlns=\"http://www.w3.org/2000/svg\"><use xlink:href=\"#dislike_empty\"></use></svg>\n                <span class=\"counter-number js-vote-rating-down\">52</span>\n              </div>\n            \n        \n</div>\n\n    </div>\n  </div>\n",
-    "sTextFav": "\n\n\n\n\n\n\n\n\n    \n\n        \n<div class=\"ls-counter ls-favourite ls-favourite--has-counter ls-favourite--locked ls-favourite--guest ls-favourite--guest   \"\n     data-param-i-target-id=\"29556\"\n     data-type=\"topic\"\n     title=\"Добавить в избранное\"\n     >\n\n    \n      <svg class=\"icon icon-star\" xmlns=\"http://www.w3.org/2000/svg\"><use xmlns:xlink=\"http://www.w3.org/1999/xlink\" xlink:href=\"#star_empty\"></use></svg>\n      \n      <span class=\"counter-number ls-favourite-count js-favourite-count\" >\n        39\n      </span>\n</div>\n",
+  "91100": {
+    "title": "Глубина. Погружение 56-е",
+    "res": "{\"ct\":\"74rOruaaz\\/d3Suiz71Bk6gVIAXC7F+zg6zzN0znezM1GparAz1mEVrEuOei0N\\/gZqVqBbf+90ALxYAFdtu0swm+JiNqaYsKizeRy9SZk8P4LFC+V7OtANBPRgm8L8U73tCtf4H6ss3yDCBbJVpC+DAKPPM2\\/nbCxbvx6sVL45Wc=\",\"iv\":\"0cc7604e2c2f90ea16f164c243068bc0\",\"s\":\"4468015a5f8aae2b\"}",
+    "hres": "{\"ct\":\"PnMK5PEwNvMfWmMPTPwaNH8XUcg+X4OLWngMQqmu96BxEJQ1F4s2a4ZSO4iiC0FscXO6AU5g8KM\\/vevGaaE+WamR91RgN96\\/NzXbPM3Evq3ECLioTwYS6pFKr4vgWD+V\",\"iv\":\"861c8792822cc43709431207198a6474\",\"s\":\"244c2874c8c80fe4\"}",
+    "srv": "https://r1.akniga.club/",
+    "sTextAuthor": "  <div class=\"tooltip__wrapper \">\n    <a rel=\"author\" class=\"link__author\" href=\"https://akniga.org/author/%D0%90%D0%BA%D0%B8%D0%BD%D0%B0%D1%80%D0%B8%20%D0%A3%D1%8D%D0%B4%D0%B0/\">\n              <svg class=\"icon icon-author\" xmlns=\"http://www.w3.org/2000/svg\"><use xlink:href=\"#author\"></use></svg>\n            <span itemprop=\"author\">Акинари Уэда</span>\n    </a>\n    <div class=\"tooltip__main tooltip__main--top\">\n      \n       \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n                \n    \n\n\n    \n\n\n<div class=\"ls-vote ls-vote-body ls-vote--count-positive ls-vote--not-voted ls-vote--default  js-vote-author\"  data-param-i-target-id=\"53730\" data-type=\"author\">\n    \n        \n            \n              \n              \n\n                <div class=\"ls-vote-item ls-vote-item-up  ls-counter \" title=\"\" data-vote-value=\"1\">\n                  <svg class=\"icon\" xmlns=\"http://www.w3.org/2000/svg\"><use xlink:href=\"#like_empty\"></use></svg>\n                  <span class=\"counter-number js-vote-rating-up\">1</span>\n                </div>\n                \n\n              \n                              <div class=\"ls-vote-item ls-vote-item-down  ls-counter \" title=\"\" data-vote-value=\"-1\">\n                  <svg class=\"icon\" xmlns=\"http://www.w3.org/2000/svg\"><use xlink:href=\"#dislike_empty\"></use></svg>\n                                  </div>\n              \n              \n\n        \n</div>\n\n    </div>\n  </div>\n",
+    "sTextFav": "\n\n\n\n\n\n\n\n\n    \n\n        \n<div class=\"ls-counter ls-favourite ls-favourite--has-counter ls-favourite--locked ls-favourite--guest ls-favourite--guest   \"\n     data-param-i-target-id=\"63744\"\n     data-type=\"topic\"\n     title=\"Добавить в избранное\"\n     >\n\n    \n      <svg class=\"icon icon-star\" xmlns=\"http://www.w3.org/2000/svg\"><use xmlns:xlink=\"http://www.w3.org/1999/xlink\" xlink:href=\"#star_empty\"></use></svg>\n      \n      <span class=\"counter-number ls-favourite-count js-favourite-count\" >\n        72\n      </span>\n</div>\n",
     "items": [
       {
         "file": 1,
-        "title": "Суровые Времена - 01 Часть 1",
-        "time": 2903,
-        "duration": 2903,
+        "title": "00. intro",
+        "time": 54,
+        "duration": 54,
+        "durationhms": "00:54",
         "time_from_start": 0,
-        "time_finish": 2903
+        "time_finish": 54
       },
       {
         "file": 1,
-        "title": "Суровые Времена - 02 Часть 2",
-        "time": 6295,
-        "duration": 3392,
-        "time_from_start": 2903,
-        "time_finish": 6295
+        "title": "01. Уэда Акинари - Круча Сираминэ (чит. Дмитрий Игнатьев)",
+        "time": 1905,
+        "duration": 1851,
+        "durationhms": "30:51",
+        "time_from_start": 54,
+        "time_finish": 1905
       },
       {
         "file": 1,
-        "title": "Суровые Времена - 03 Часть 3",
-        "time": 9546,
-        "duration": 3251,
-        "time_from_start": 6295,
-        "time_finish": 9546
+        "title": "02. Лафкадио Хирн - История о самурае по имени Ито (чит. Алексей Дик)",
+        "time": 4088,
+        "duration": 2183,
+        "durationhms": "36:23",
+        "time_from_start": 1905,
+        "time_finish": 4088
       },
       {
-        "file": 2,
-        "title": "Суровые Времена - 04 Часть 4",
-        "time": 12589,
-        "duration": 3043,
-        "time_from_start": 0,
-        "time_finish": 3043
+        "file": 1,
+        "title": "03. Брюс Стерлинг - Цветы Эдо (чит. Владимир Овуор)",
+        "time": 8277,
+        "duration": 4189,
+        "durationhms": "01:09:49",
+        "time_from_start": 4088,
+        "time_finish": 8277
       },
       {
-        "file": 2,
-        "title": "Суровые Времена - 05 Часть 5",
-        "time": 15686,
-        "duration": 3097,
-        "time_from_start": 3043,
-        "time_finish": 6140
+        "file": 1,
+        "title": "04. Хидэюки Кикути - Подкидыш (чит. Роман Волков)",
+        "time": 8957,
+        "duration": 680,
+        "durationhms": "11:20",
+        "time_from_start": 8277,
+        "time_finish": 8957
       },
       {
-        "file": 2,
-        "title": "Суровые Времена - 06 Часть 6",
-        "time": 18839,
-        "duration": 3153,
-        "time_from_start": 6140,
-        "time_finish": 9293
+        "file": 1,
+        "title": "05. Японская притча - Мастер чайной церемонии и ронин (чит. Роман Волков)",
+        "time": 9452,
+        "duration": 495,
+        "durationhms": "08:15",
+        "time_from_start": 8957,
+        "time_finish": 9452
       },
       {
-        "file": 3,
-        "title": "Суровые Времена - 07 Часть 7",
-        "time": 22350,
-        "duration": 3511,
-        "time_from_start": 0,
-        "time_finish": 3511
+        "file": 1,
+        "title": "06. Огай Мори - Месть в Годзиингахаре (чит. Вадим Чернобельский)",
+        "time": 12504,
+        "duration": 3052,
+        "durationhms": "50:52",
+        "time_from_start": 9452,
+        "time_finish": 12504
       },
       {
-        "file": 3,
-        "title": "Суровые Времена - 08 Часть 8",
-        "time": 25327,
-        "duration": 2977,
-        "time_from_start": 3511,
-        "time_finish": 6488
+        "file": 1,
+        "title": "07. Уэда Акинари - Распутство змеи (чит. Светлана Шаклеина)",
+        "time": 15523,
+        "duration": 3019,
+        "durationhms": "50:19",
+        "time_from_start": 12504,
+        "time_finish": 15523
       },
       {
-        "file": 3,
-        "title": "Суровые Времена - 09 Часть 9",
-        "time": 28391,
-        "duration": 3064,
-        "time_from_start": 6488,
-        "time_finish": 9552
+        "file": 1,
+        "title": "08. Хидэюки Кикути - Разговор о Моске (чит. Павел Ломакин)",
+        "time": 16146,
+        "duration": 623,
+        "durationhms": "10:23",
+        "time_from_start": 15523,
+        "time_finish": 16146
       },
       {
-        "file": 4,
-        "title": "Суровые Времена - 10 Часть 10",
-        "time": 31989,
-        "duration": 3598,
-        "time_from_start": 0,
-        "time_finish": 3598
+        "file": 1,
+        "title": "09. Хидэюки Кикути - Бекасова лощина (чит. Павел Ломакин)",
+        "time": 17008,
+        "duration": 862,
+        "durationhms": "14:22",
+        "time_from_start": 16146,
+        "time_finish": 17008
       },
       {
-        "file": 4,
-        "title": "Суровые Времена - 11 Часть 11",
-        "time": 35213,
-        "duration": 3224,
-        "time_from_start": 3598,
-        "time_finish": 6822
+        "file": 1,
+        "title": "10. Рюноскэ Акутагава - Рассказ об одной мести (чит. Владимир Князев)",
+        "time": 19282,
+        "duration": 2274,
+        "durationhms": "37:54",
+        "time_from_start": 17008,
+        "time_finish": 19282
       },
       {
-        "file": 4,
-        "title": "Суровые Времена - 12 Часть 12",
-        "time": 39557,
-        "duration": 4344,
-        "time_from_start": 6822,
-        "time_finish": 11166
+        "file": 1,
+        "title": "11. Сюхэй Фудзисава - Тигриное око - орудие тайных убийц (чит. Юрий Гуржий)",
+        "time": 23119,
+        "duration": 3837,
+        "durationhms": "01:03:57",
+        "time_from_start": 19282,
+        "time_finish": 23119
+      },
+      {
+        "file": 1,
+        "title": "12. Асатаро Миямори - Унго Дзендзи (чит. Роман Панков)",
+        "time": 25042,
+        "duration": 1923,
+        "durationhms": "32:03",
+        "time_from_start": 23119,
+        "time_finish": 25042
+      },
+      {
+        "file": 1,
+        "title": "13. Хидэюки Кикути - Возвращение Дзюдзабуро (чит. Олег Булдаков)",
+        "time": 29791,
+        "duration": 4749,
+        "durationhms": "01:19:09",
+        "time_from_start": 25042,
+        "time_finish": 29791
+      },
+      {
+        "file": 1,
+        "title": "14. Мэтт Лондон - Модзя (чит. Кирилл Головин)",
+        "time": 31324,
+        "duration": 1533,
+        "durationhms": "25:33",
+        "time_from_start": 29791,
+        "time_finish": 31324
+      },
+      {
+        "file": 1,
+        "title": "15. outro",
+        "time": 31365,
+        "duration": 41,
+        "durationhms": "00:41",
+        "time_from_start": 31324,
+        "time_finish": 31365
       }
     ],
-    "key": "TJ3-dpYYUfFen7fZ8uK41g,,",
-    "topic_id": "29556",
-    "title": "Кук Глен - Суровые времена",
-    "titleonly": "Суровые времена",
-    "bookurl": "https://akniga.org/kuk-glen-surovye-vremena",
-    "preview": "https://akniga.org/uploads/media/topic/2020/08/05/10/preview/9062362c3c6eb74c1938_100x100crop.jpg",
-    "author": "Кук Глен",
-    "srv": "https://m17.akniga.club/",
+    "topic_id": "63744",
+    "titleonly": "Глубина. Погружение 56-е ",
+    "slug": "glubina-pogruzhenie-56-e",
+    "version": 1,
+    "bookurl": "https://akniga.org/glubina-pogruzhenie-56-e",
+    "preview": "https://akniga.org/uploads/media/topic/2024/05/31/08/preview/fe35b1daf43cc19fae7c_100x100crop.jpg",
+    "author": "Акинари Уэда и др.",
     "sMsgTitle": "",
     "sMsg": "",
     "bStateError": false,
-    "current_mfileId": 4,
-    "chapterId": 9
+    "current_mfileId": 1,
+    "chapterId": 0
   }
 }

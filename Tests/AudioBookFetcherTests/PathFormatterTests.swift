@@ -1,20 +1,19 @@
 @testable import AudioBookFetcher
 import XCTest
 
-private struct TestChapter: BookChapter {
-    let id: Int?
-    public var name: String?
-    public var start: Int?
+private struct TestAudioBook: AudioBook {
+    var title: String
+    var authors: [String]
+    var description: String
+    var chapters: [any AudioBookFetcher.BookChapter]
+    var coverURL: URL
+    var content: AudioBookFetcher.AudioBookContent
 }
-
-private final class TestAudioBook: AnyAudioBook<TestChapter> {
-}
-
 
 final class PathFormatterTests: XCTestCase {
     func testBasePath() {
-        let book = TestAudioBook(name: "name", author: "author", description: "description", chapters: [])
-        let formatter = PathFormatter(baseURL: URL(fileURLWithPath: "/"), pattern: "%a/author-%a/%n/%nname", book: book)
-        XCTAssertEqual(formatter.baseURL.path, "/author/author-author/name/namename")
+        let book = TestAudioBook(title: "title", authors: ["author1", "author2"], description: "description", chapters: [], coverURL: URL(fileURLWithPath: ""), content: .m3u8(URL(fileURLWithPath: "")))
+        let formatter = PathFormatter(base: "/hello/a-@author/@author/t-@title/@title", book: book)
+        XCTAssertEqual(formatter.path.path, "/hello/a-author1/author1/t-title/title")
     }
 }

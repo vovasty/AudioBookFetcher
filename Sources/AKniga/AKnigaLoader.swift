@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  AKnigaLoader.swift
 //
 //
 //  Created by Vladimir Solomenchuk on 8/5/20.
@@ -9,105 +9,80 @@ import AudioBookFetcher
 import Combine
 import Foundation
 import WebKit
+import WebViewSniffer
 
-private extension WKWebView {
-    func evaluate(script: String, completion: @escaping (Any?, Error?) -> Void) {
-        var finished = false
+private final class WebView: NSObject, WKNavigationDelegate {
+    private let subject = CurrentValueSubject<Bool, Error>(false)
+    let webView: WKWebView
 
-        evaluateJavaScript(script, completionHandler: { result, error in
-            if error == nil {
-                if result != nil {
-                    completion(result, nil)
-                }
-            } else {
-                completion(nil, error)
-            }
-            finished = true
-        })
-
-        while !finished {
-            RunLoop.current.run(mode: RunLoop.Mode(rawValue: "NSDefaultRunLoopMode"), before: NSDate.distantFuture)
-        }
-    }
-}
-
-public class AKnigaLoader: NSObject {
-    public enum Error: Swift.Error {
-        case noData, noHTML, noID, unknown
-    }
-
-    private let webView = WKWebView(frame: NSMakeRect(0, 0, 0, 0))
-    private var subject: PassthroughSubject<AnyAudioBook<AKnigaChapter>, Swift.Error>
-
-    override public init() {
-        subject = PassthroughSubject<AnyAudioBook<AKnigaChapter>, Swift.Error>()
+    init(config: WKWebViewConfiguration) {
+        webView = WKWebView(frame: .zero, configuration: config)
+        config.processPool = WKProcessPool()
+        config.websiteDataStore = WKWebsiteDataStore.nonPersistent()
         super.init()
         webView.navigationDelegate = self
     }
-}
 
-extension AKnigaLoader: WKNavigationDelegate {
-    public func webView(_: WKWebView, didFail _: WKNavigation!, withError error: Error) {
-        subject.send(completion: .failure(error))
-    }
-
-    public func webView(_: WKWebView, didFailProvisionalNavigation _: WKNavigation!, withError error: Error) {
-        subject.send(completion: .failure(error))
-    }
-
-    public func webView(_: WKWebView, didStartProvisionalNavigation _: WKNavigation!) {
-        logger.info("started")
-    }
-
-    public func webView(_ webView: WKWebView, didFinish _: WKNavigation!) {
-        webView.evaluate(script: "JSON.stringify(bookData)") { [weak self] result, error in
-            guard let self = self else { return }
-            guard error == nil else {
-                self.subject.send(completion: .failure(error ?? Error.unknown))
-                return
-            }
-
-            guard let bookDataString = result as? String else {
-                self.subject.send(completion: .failure(Error.noData))
-                return
-            }
-
-            guard let bookData = bookDataString.data(using: .utf8) else {
-                self.subject.send(completion: .failure(Error.noData))
-                return
-            }
-
-            webView.evaluate(script: "document.documentElement.outerHTML.toString()") { [weak self] result, error in
-                guard let self = self else { return }
-                guard error == nil else {
-                    self.subject.send(completion: .failure(error ?? Error.unknown))
-                    return
-                }
-
-                guard let html = result as? String else {
-                    self.subject.send(completion: .failure(Error.noHTML))
-                    return
-                }
-
-                do {
-                    let bookData = try JSONDecoder().decode(BookDataResponse.self, from: bookData)
-                    guard let id = bookData.keys.first else { throw Error.noID }
-                    guard let book = bookData[id] else { throw Error.noID }
-                    let parser = try AKnigaAudioBook(id: id, html: html, bookData: book)
-                    self.subject.send(parser)
-                    self.subject.send(completion: .finished)
-                } catch {
-                    self.subject.send(completion: .failure(error))
-                }
-            }
+    func load(_ url: URL) async throws {
+        await webView.load(URLRequest(url: url))
+        for try await finished in subject.values {
+            guard finished else { continue }
+            break
         }
     }
+
+    public func webView(_: WKWebView, didFinish _: WKNavigation!) {
+        subject.send(completion: .finished)
+    }
+
+    func webView(_: WKWebView, didFail _: WKNavigation!, withError error: Error) {
+        subject.send(completion: .failure(error))
+    }
+
+    func webView(_: WKWebView, didFailProvisionalNavigation _: WKNavigation!, withError error: Error) {
+        subject.send(completion: .failure(error))
+    }
 }
 
-extension AKnigaLoader: AudioBookLoader {
-    public func load(url: URL) -> AnyPublisher<AnyAudioBook<AKnigaChapter>, Swift.Error> {
-        let request = URLRequest(url: url)
-        webView.load(request)
-        return subject.eraseToAnyPublisher()
+public struct AKnigaLoader: AudioBookLoader {
+    public enum AKnigaLoaderError: Swift.Error {
+        case noData, noHTML, noM3u8Url
+    }
+
+    public init() {}
+
+    @MainActor
+    public func load(url: URL) async throws -> any AudioBookFetcher.AudioBook {
+        let m3u8UrlSubject = CurrentValueSubject<URL?, Never>(nil)
+        let config = WKWebViewConfiguration.interceptable { response in
+            guard let url = response.url else { return }
+            guard url.pathExtension == "m3u8" else { return }
+            m3u8UrlSubject.send(url)
+        }
+
+        let webView = WebView(config: config)
+
+        try await webView.load(url)
+
+        guard let bookDataResponse = try await webView.webView.evaluateJavaScript("JSON.stringify(bookData)") as? String else {
+            throw AKnigaLoaderError.noData
+        }
+
+        guard let html = try await webView.webView.evaluateJavaScript("document.documentElement.outerHTML.toString()") as? String else {
+            throw AKnigaLoaderError.noHTML
+        }
+
+        var m3u8Url: URL?
+        for try await m3u8 in m3u8UrlSubject.values {
+            guard let m3u8 else { continue }
+            m3u8Url = m3u8
+            break
+        }
+
+        guard let m3u8Url else {
+            throw AKnigaLoaderError.noM3u8Url
+        }
+
+        return try AKnigaAudioBook(html: html, bookDataResponse: bookDataResponse, m3u8URL: m3u8Url)
     }
 }
