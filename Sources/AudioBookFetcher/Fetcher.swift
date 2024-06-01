@@ -60,7 +60,7 @@ public struct Fetcher {
 
         logger.info("assembling")
         let output = PathFormatter(base: output, book: book).path
-        try fm.createDirectory(at: output.deletingLastPathComponent() , withIntermediateDirectories: true)
+        try fm.createDirectory(at: output.deletingLastPathComponent(), withIntermediateDirectories: true)
         try await assemble(
             media: media,
             cover: cover,

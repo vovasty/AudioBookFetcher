@@ -24,6 +24,14 @@ struct ABookFetcher: AsyncParsableCommand {
 
     mutating func run() async throws {
         guard let url = URL(string: url) else { throw Error.invalidURL }
+        // https://stackoverflow.com/a/45714258
+        signal(SIGINT, SIG_IGN)
+        let sigintSrc = DispatchSource.makeSignalSource(signal: SIGINT, queue: .main)
+        sigintSrc.setEventHandler {
+            Foundation.exit(1)
+        }
+        sigintSrc.resume()
+
         let loader = AKnigaLoader()
         let fetcher = Fetcher(loader: loader)
         try await fetcher.load(url: url, output: path)

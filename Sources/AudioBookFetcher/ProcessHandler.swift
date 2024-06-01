@@ -44,6 +44,14 @@ struct ProcessHandler {
                             input.fileHandleForWriting.write(data)
                         }
                     }
+
+                    // https://stackoverflow.com/a/45714258
+                    let sigintSrc = DispatchSource.makeSignalSource(signal: SIGINT, queue: .main)
+                    sigintSrc.setEventHandler {
+                        task.terminate()
+                    }
+                    sigintSrc.resume()
+
                     do {
                         try task.run()
                         task.waitUntilExit()
