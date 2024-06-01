@@ -38,6 +38,7 @@ let package = Package(
                 "AudioBookFetcher",
                 "AKniga",
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
+                .product(name: "Logging", package: "swift-log"),
             ]
         ),
         .target(

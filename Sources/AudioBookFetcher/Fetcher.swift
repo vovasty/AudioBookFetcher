@@ -31,13 +31,13 @@ public struct Fetcher {
     let fm = FileManager()
     let logger = Logger(label: "net.aramzamzam.abookfetcher")
     let session = URLSession(configuration: .default)
+    let tempDirectory = URL(filePath: NSTemporaryDirectory()).appending(path: UUID().uuidString)
 
     public init(loader: AudioBookLoader) {
         self.loader = loader
     }
 
     public func load(url: URL, output: String) async throws {
-        let tempDirectory = URL(filePath: NSTemporaryDirectory()).appending(path: UUID().uuidString)
         try fm.createDirectory(at: tempDirectory, withIntermediateDirectories: false)
 
         logger.info("fetching descriptor")
@@ -70,6 +70,11 @@ public struct Fetcher {
         logger.info("completed")
     }
 
+    public func cleanup() {
+        logger.debug("removing \(tempDirectory.path(percentEncoded: false))")
+        try? fm.removeItem(at: tempDirectory)
+    }
+
     private func assemble(media: URL, cover: URL, metadata: URL, output: URL) async throws {
         let cmd = [
             "ffmpeg",
@@ -94,8 +99,7 @@ public struct Fetcher {
             output.path(percentEncoded: false),
         ]
 
-        logger.debug("running \(cmd.joined(separator: " "))")
-        try await handler.run(process: ProcessHandler.ProcessCommand(arguments: cmd))
+        try await run(cmd)
     }
 
     private func writeMetadata(book: AudioBook, output: URL) throws {
@@ -128,6 +132,15 @@ public struct Fetcher {
             )
     }
 
+    private func run(_ cmd: [String]) async throws {
+        logger.debug("running \(cmd.joined(separator: " "))")
+        if logger.logLevel == .debug {
+            try await handler.run(process: ProcessHandler.ProcessCommand(arguments: cmd))
+        } else {
+            try await handler.runSilent(process: ProcessHandler.ProcessCommand(arguments: cmd))
+        }
+    }
+
     private func fetchCover(url: URL, output: URL) async throws {
         let (tmpDownloaded, _) = try await session.download(from: url)
         logger.debug("fetching \(url)")
@@ -137,8 +150,7 @@ public struct Fetcher {
             tmpDownloaded.absoluteString,
             output.absoluteString,
         ]
-        logger.debug("running \(cmd.joined(separator: " "))")
-        try await handler.run(process: ProcessHandler.ProcessCommand(arguments: cmd))
+        try await run(cmd)
         try fm.removeItem(at: tmpDownloaded)
     }
 
@@ -157,8 +169,7 @@ public struct Fetcher {
                 "copy",
                 output.absoluteString,
             ]
-            logger.debug("running \(cmd.joined(separator: " "))")
-            try await handler.run(process: ProcessHandler.ProcessCommand(arguments: cmd))
+            try await run(cmd)
         }
     }
 }

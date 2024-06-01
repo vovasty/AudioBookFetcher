@@ -68,4 +68,44 @@ struct ProcessHandler {
                 }
         }
     }
+
+    func runSilent(process: ProcessCommand) async throws {
+        try await withCheckedThrowingContinuation { continuation in
+            DispatchQueue.global(qos: .userInitiated)
+                .async {
+                    let task = Process()
+                    let output = Pipe()
+                    let error = Pipe()
+                    let input = Pipe()
+
+                    task.standardOutput = output
+                    task.standardInput = input
+                    task.standardError = error
+                    task.arguments = process.arguments
+                    task.executableURL = executableURL
+                    task.launchPath = launchPath
+
+                    // https://stackoverflow.com/a/45714258
+                    let sigintSrc = DispatchSource.makeSignalSource(signal: SIGINT, queue: .main)
+                    sigintSrc.setEventHandler {
+                        task.terminate()
+                    }
+                    sigintSrc.resume()
+
+                    do {
+                        try task.run()
+                        task.waitUntilExit()
+                        let returnCode = task.terminationStatus
+                        if returnCode == 0 {
+                            continuation.resume(returning: ())
+                        } else {
+                            continuation.resume(throwing: ProcessError.failure(code: returnCode))
+                        }
+                    } catch {
+                        let returnCode = task.terminationStatus
+                        continuation.resume(throwing: ProcessError.failure(code: returnCode))
+                    }
+                }
+        }
+    }
 }
