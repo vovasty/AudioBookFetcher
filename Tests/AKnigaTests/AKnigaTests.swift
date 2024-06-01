@@ -14,6 +14,7 @@ final class AKnigaTests: XCTestCase {
         XCTAssertFalse(parsed.authors.isEmpty)
         XCTAssertFalse(parsed.description.isEmpty)
         XCTAssertFalse(parsed.chapters.isEmpty)
+        XCTAssertEqual(parsed.coverURL, URL(string: "https://akniga.org/uploads/media/topic/2024/05/31/08/preview/fe35b1daf43cc19fae7c_400x.jpg"))
     }
 
     func testLoad() {

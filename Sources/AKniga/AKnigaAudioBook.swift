@@ -57,7 +57,15 @@ struct AKnigaAudioBook: AudioBook {
 
         let document = try SwiftSoup.parse(html)
 
-        coverURL = bookData.preview
+        if let sCoverURL = try document
+            .select("img.loaded")
+            .compactMap({ $0.getAttributes() })
+            .map({ $0.get(key: "src") })
+            .first, let url = URL(string: sCoverURL) {
+            coverURL = url
+        } else {
+            coverURL = bookData.preview
+        }
         title = try document.select("[itemprop=\"name\"]").map { try $0.text() }.joined()
         self.m3u8URL = m3u8URL
         authors = try document.select("[itemprop=\"author\"]").map { try $0.text() }
