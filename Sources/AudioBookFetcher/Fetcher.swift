@@ -26,6 +26,10 @@ public protocol AudioBookLoader {
 }
 
 public struct Fetcher {
+    enum Failure: Error {
+        case fileExists(String)
+    }
+
     let loader: AudioBookLoader
     let handler = ProcessHandler(executableURL: URL(fileURLWithPath: "/bin/sh"), launchPath: "/usr/bin/env")
     let fm = FileManager()
@@ -38,6 +42,9 @@ public struct Fetcher {
     }
 
     public func load(url: URL, output: String) async throws {
+        guard !fm.fileExists(atPath: output) else {
+            throw Failure.fileExists(output)
+        }
         try fm.createDirectory(at: tempDirectory, withIntermediateDirectories: false)
 
         logger.info("fetching descriptor")
@@ -170,6 +177,15 @@ public struct Fetcher {
                 output.absoluteString,
             ]
             try await run(cmd)
+        }
+    }
+}
+
+extension Fetcher.Failure: LocalizedError {
+    var errorDescription: String? {
+        switch self {
+        case let .fileExists(path):
+            "File already exists: \(path)"
         }
     }
 }
