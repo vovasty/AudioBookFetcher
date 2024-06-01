@@ -92,7 +92,7 @@ didCompleteWithError:(NSError *)error
         [self.schemeTask didFailWithError:error];
     }else{
         [self.schemeTask didFinish];
-        [[SSCache sharedCache] finishRequestForRequestId:[SSUtils requestIdForRequest:task.currentRequest]];
+//        [[SSCache sharedCache] finishRequestForRequestId:[SSUtils requestIdForRequest:task.currentRequest]];
     }
 }
 
@@ -104,7 +104,7 @@ didReceiveData:(NSData *)data
         return;
     }
     [self.schemeTask didReceiveData:data];
-    [[SSCache sharedCache] saveData:data forRequestId:[SSUtils requestIdForRequest:dataTask.currentRequest]];
+//    [[SSCache sharedCache] saveData:data forRequestId:[SSUtils requestIdForRequest:dataTask.currentRequest]];
 }
 
 
@@ -118,7 +118,7 @@ didReceiveResponse:(NSURLResponse *)response
     [self.schemeTask didReceiveResponse:response];
     if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
         NSHTTPURLResponse *httpRes = (NSHTTPURLResponse *)response;
-        [[SSCache sharedCache] saveResponseHeaders:httpRes.allHeaderFields forRequestId:[SSUtils requestIdForRequest:dataTask.currentRequest]];
+//        [[SSCache sharedCache] saveResponseHeaders:httpRes.allHeaderFields forRequestId:[SSUtils requestIdForRequest:dataTask.currentRequest]];
 
     }
 }
@@ -142,9 +142,8 @@ didReceiveResponse:(NSURLResponse *)response
 
 
 
-@interface SSWKURLHandler:NSObject <WKURLSchemeHandler,NSURLSessionDelegate>
+@interface SSWKURLHandler()
 
-@property (nonatomic,strong) Class protocolClass;
 @property (nonatomic,strong) NSURLSession *session;
 @property (nonatomic,strong) dispatch_queue_t queue;
 

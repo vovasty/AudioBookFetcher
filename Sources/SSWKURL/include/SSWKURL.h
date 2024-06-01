@@ -27,3 +27,8 @@
 - (void)ssRegisterURLProtocol:(Class)protocolClass;
 
 @end
+
+@interface SSWKURLHandler:NSObject <WKURLSchemeHandler,NSURLSessionDelegate,NSURLSessionDataDelegate>
+@property (nonatomic,strong) Class protocolClass;
++ (SSWKURLHandler *) sharedInstance;
+@end
