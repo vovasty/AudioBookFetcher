@@ -1,16 +1,22 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.10
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 
 let package = Package(
     name: "AudioBookFetcher",
-    platforms: [.macOS(.v10_15)],
+    platforms: [
+        .macOS(.v14),
+    ],
     products: [
         .executable(name: "abookfetcher", targets: ["abookfetcher"]),
         .library(
             name: "AudioBookFetcher",
             targets: ["AudioBookFetcher"]
+        ),
+        .library(
+            name: "WebViewSniffer",
+            targets: ["WebViewSniffer"]
         ),
         .library(
             name: "SSWKURL",
@@ -19,7 +25,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/scinfu/SwiftSoup", from: "2.0.0"),
-        .package(url: "https://github.com/apple/swift-argument-parser", from: "0.2.2"),
+        .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.4.0"),
     ],
     targets: [
         .target(
@@ -42,6 +48,19 @@ let package = Package(
             name: "AKnigaTests",
             dependencies: ["AKniga", "AudioBookFetcher"],
             resources: [Resource.copy("Resources")]
+        ),
+        .target(
+            name: "WebViewSniffer",
+            dependencies: [
+                "SSWKURL",
+            ]
+        ),
+
+        .testTarget(
+            name: "WebViewSnifferTests",
+            dependencies: [
+                "WebViewSniffer",
+            ]
         ),
 
         .target(
