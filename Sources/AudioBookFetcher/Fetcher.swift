@@ -27,7 +27,7 @@ public protocol AudioBookLoader {
 
 public struct Fetcher {
     enum Failure: Error {
-        case fileExists(String)
+        case fileExists(String), timeout
     }
 
     let loader: AudioBookLoader
@@ -42,13 +42,19 @@ public struct Fetcher {
     }
 
     public func load(url: URL, output: String) async throws {
-        guard !fm.fileExists(atPath: output) else {
-            throw Failure.fileExists(output)
-        }
         try fm.createDirectory(at: tempDirectory, withIntermediateDirectories: false)
 
         logger.info("fetching descriptor")
-        let book = try await loader.load(url: url)
+        let book = try await with(timeout: 10) {
+            try await loader.load(url: url)
+        }
+
+        let output = PathFormatter(base: output, book: book).path
+
+        guard !fm.fileExists(atPath: output.path(percentEncoded: false)) else {
+            throw Failure.fileExists(output.path(percentEncoded: false))
+        }
+
         logger.info("fetching media")
         let media = tempDirectory.appending(path: "fetched.m4b")
         try await fetchContent(
@@ -66,7 +72,6 @@ public struct Fetcher {
         try writeMetadata(book: book, output: metadata)
 
         logger.info("assembling")
-        let output = PathFormatter(base: output, book: book).path
         try fm.createDirectory(at: output.deletingLastPathComponent(), withIntermediateDirectories: true)
         try await assemble(
             media: media,
@@ -179,6 +184,31 @@ public struct Fetcher {
             try await run(cmd)
         }
     }
+
+    private func with<T>(timeout: Double, closure: @escaping () async throws -> T) async throws -> T {
+        let subject = PassthroughSubject<T, Error>()
+
+        let task = Task {
+            let value = try await closure()
+            subject.send(value)
+        }
+
+        do {
+            let value = try await subject
+                .timeout(.seconds(timeout), scheduler: DispatchQueue.main)
+                .values
+                .first { _ in true }
+
+            guard let value else {
+                throw Failure.timeout
+            }
+
+            return value
+        } catch {
+            task.cancel()
+            throw error
+        }
+    }
 }
 
 extension Fetcher.Failure: LocalizedError {
@@ -186,6 +216,8 @@ extension Fetcher.Failure: LocalizedError {
         switch self {
         case let .fileExists(path):
             "File already exists: \(path)"
+        case .timeout:
+            "Timeout"
         }
     }
 }
