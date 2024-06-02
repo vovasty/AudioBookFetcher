@@ -45,8 +45,9 @@ struct AKnigaAudioBook: AudioBook {
     let description: String
     let chapters: [BookChapter]
     let content: AudioBookContent
+    let bookUrl: URL
 
-    init(html: String, bookDataResponse: String, m3u8URL: URL) throws {
+    init(bookUrl: URL, html: String, bookDataResponse: String, m3u8URL: URL) throws {
         guard let bookDataResponseData = bookDataResponse.data(using: .utf8) else {
             throw AKnigaAudioBookError.noResponse
         }
@@ -61,7 +62,8 @@ struct AKnigaAudioBook: AudioBook {
             .select("img.loaded")
             .compactMap({ $0.getAttributes() })
             .map({ $0.get(key: "src") })
-            .first, let url = URL(string: sCoverURL) {
+            .first, let url = URL(string: sCoverURL)
+        {
             coverURL = url
         } else {
             coverURL = bookData.preview
@@ -72,5 +74,6 @@ struct AKnigaAudioBook: AudioBook {
         description = try document.select("[itemprop=\"description\"]").map { try $0.text() }.joined(separator: "\n")
         chapters = bookData.items
         content = .m3u8(m3u8URL)
+        self.bookUrl = bookUrl
     }
 }

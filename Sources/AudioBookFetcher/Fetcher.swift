@@ -15,7 +15,7 @@ public protocol AudioBook {
     var chapters: [BookChapter] { get }
     var coverURL: URL { get }
     var content: AudioBookContent { get }
-    var performers: [String] { get }
+    var bookUrl: URL { get }
 }
 
 public enum AudioBookContent {
@@ -28,7 +28,7 @@ public protocol AudioBookLoader {
 
 public struct Fetcher {
     enum Failure: Error {
-        case fileExists(String), timeout
+        case fileExists(String)
     }
 
     let loader: AudioBookLoader
@@ -37,6 +37,7 @@ public struct Fetcher {
     let logger = Logger(label: "net.aramzamzam.abookfetcher")
     let session = URLSession(configuration: .default)
     let tempDirectory = URL(filePath: NSTemporaryDirectory()).appending(path: UUID().uuidString)
+    let metadataMax = 140
 
     public init(loader: AudioBookLoader) {
         self.loader = loader
@@ -121,11 +122,13 @@ public struct Fetcher {
         ]
 
         if let artist = book.authors.first {
-            buf.append("artist=\(artist)")
+            buf.append("artist=\(artist.max(metadataMax))")
         }
 
-        buf.append("title=\(book.title)")
-        buf.append("album=\(book.title)")
+        buf.append("title=\(book.title.max(metadataMax))")
+        buf.append("album=\(book.title.max(metadataMax))")
+        buf.append("description=\(book.description.max(metadataMax).replacingOccurrences(of: "\n", with: "\\n"))")
+        buf.append("comment=\(book.bookUrl.absoluteString)")
 
         for chapter in book.chapters {
             buf.append("[CHAPTER]")
@@ -133,7 +136,7 @@ public struct Fetcher {
             buf.append("START=\(chapter.start)")
             buf.append("END=\(chapter.end)")
             if let title = chapter.title {
-                buf.append("title=\(title)")
+                buf.append("title=\(title.max(metadataMax))")
             }
         }
 
@@ -186,31 +189,6 @@ public struct Fetcher {
             try await run(cmd)
         }
     }
-
-    private func with<T>(timeout: Double, closure: @escaping () async throws -> T) async throws -> T {
-        let subject = PassthroughSubject<T, Error>()
-
-        let task = Task {
-            let value = try await closure()
-            subject.send(value)
-        }
-
-        do {
-            let value = try await subject
-                .timeout(.seconds(timeout), scheduler: DispatchQueue.main)
-                .values
-                .first { _ in true }
-
-            guard let value else {
-                throw Failure.timeout
-            }
-
-            return value
-        } catch {
-            task.cancel()
-            throw error
-        }
-    }
 }
 
 extension Fetcher.Failure: LocalizedError {
@@ -218,8 +196,6 @@ extension Fetcher.Failure: LocalizedError {
         switch self {
         case let .fileExists(path):
             "File already exists: \(path)"
-        case .timeout:
-            "Timeout"
         }
     }
 }

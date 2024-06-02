@@ -83,6 +83,6 @@ public struct AKnigaLoader: AudioBookLoader {
             throw AKnigaLoaderError.noM3u8Url
         }
 
-        return try AKnigaAudioBook(html: html, bookDataResponse: bookDataResponse, m3u8URL: m3u8Url)
+        return try AKnigaAudioBook(bookUrl: url, html: html, bookDataResponse: bookDataResponse, m3u8URL: m3u8Url)
     }
 }
