@@ -128,6 +128,7 @@ public struct Fetcher {
         buf.append("title=\(book.title.max(metadataMax))")
         buf.append("album=\(book.title.max(metadataMax))")
         buf.append("description=\(book.description.max(metadataMax).replacingOccurrences(of: "\n", with: "\\n"))")
+        buf.append("synopsis=\(book.description.max(metadataMax).replacingOccurrences(of: "\n", with: "\\n"))")
         buf.append("comment=\(book.bookUrl.absoluteString)")
 
         for chapter in book.chapters {
