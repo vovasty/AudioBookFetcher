@@ -2,6 +2,16 @@ import Combine
 import Foundation
 import Logging
 
+public struct BookSeries: Hashable {
+    public let name: String
+    public let number: Int
+
+    public init(name: String, number: Int) {
+        self.name = name
+        self.number = number
+    }
+}
+
 public protocol BookChapter {
     var title: String? { get }
     var start: Int { get }
@@ -17,6 +27,7 @@ public protocol AudioBook {
     var content: AudioBookContent { get }
     var bookUrl: URL { get }
     var genre: [String] { get }
+    var series: BookSeries? { get }
 }
 
 public enum AudioBookContent {
@@ -58,6 +69,10 @@ public struct Fetcher {
             throw Failure.fileExists(output.path(percentEncoded: false))
         }
 
+        logger.info("writing descriptor")
+        let metadata = tempDirectory.appending(path: "metadata.txt")
+        try writeMetadata(book: book, output: metadata)
+
         logger.info("fetching media")
         let media = tempDirectory.appending(path: "fetched.m4b")
         try await fetchContent(
@@ -70,9 +85,6 @@ public struct Fetcher {
             url: book.coverURL,
             output: cover
         )
-        logger.info("writing descriptor")
-        let metadata = tempDirectory.appending(path: "metadata.txt")
-        try writeMetadata(book: book, output: metadata)
 
         logger.info("assembling")
         try fm.createDirectory(at: output.deletingLastPathComponent(), withIntermediateDirectories: true)
@@ -122,6 +134,7 @@ public struct Fetcher {
             ";FFMETADATA1",
         ]
 
+        // https://wiki.multimedia.cx/index.php/FFmpeg_Metadata#QuickTime.2FMOV.2FMP4.2FM4A.2Fet_al.
         if let artist = book.authors.first {
             buf.append("artist=\(artist.max(metadataMax))")
         }
@@ -132,6 +145,11 @@ public struct Fetcher {
         buf.append("synopsis=\(book.description.replacingOccurrences(of: "\n", with: "\\n").max(metadataMax))")
         buf.append("comment=\(book.bookUrl.absoluteString.max(metadataMax))")
         buf.append("genre=\(book.genre.joined(separator: ";").max(metadataMax))")
+
+        if let series = book.series {
+            buf.append("grouping=\(series.name.max(metadataMax))")
+            buf.append("track=\(series.number)")
+        }
 
         for chapter in book.chapters {
             buf.append("[CHAPTER]")

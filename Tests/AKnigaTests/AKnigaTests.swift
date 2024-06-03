@@ -1,4 +1,5 @@
 @testable import AKniga
+import AudioBookFetcher
 import XCTest
 
 final class AKnigaTests: XCTestCase {
@@ -16,6 +17,7 @@ final class AKnigaTests: XCTestCase {
         XCTAssertFalse(parsed.chapters.isEmpty)
         XCTAssertEqual(parsed.coverURL, URL(string: "https://akniga.org/uploads/media/topic/2024/05/31/08/preview/fe35b1daf43cc19fae7c_400x.jpg"))
         XCTAssertEqual(parsed.genre, ["Ужасы, мистика", "Роман, проза"])
+        XCTAssertEqual(parsed.series, BookSeries(name: "Глубина", number: 56))
     }
 
     func testLoad() {

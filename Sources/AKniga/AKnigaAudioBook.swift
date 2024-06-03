@@ -20,7 +20,7 @@ struct BookData: Decodable {
 
     let items: [Item]
     let preview: URL
-    let title: String
+    let titleonly: String
 }
 
 extension BookData.Item: BookChapter {
@@ -47,6 +47,7 @@ struct AKnigaAudioBook: AudioBook {
     let content: AudioBookContent
     let bookUrl: URL
     let genre: [String]
+    let series: BookSeries?
 
     init(bookUrl: URL, html: String, bookDataResponse: String, m3u8URL: URL) throws {
         guard let bookDataResponseData = bookDataResponse.data(using: .utf8) else {
@@ -69,13 +70,21 @@ struct AKnigaAudioBook: AudioBook {
         } else {
             coverURL = bookData.preview
         }
-        title = try document.select("[itemprop=\"name\"]").map { try $0.text() }.joined()
+        title = bookData.titleonly.trimmingCharacters(in: .whitespacesAndNewlines)
         self.m3u8URL = m3u8URL
         authors = try document.select("[itemprop=\"author\"]").map { try $0.text() }
         description = try document.select("[itemprop=\"description\"]").map { try $0.text() }.joined(separator: "\n")
         chapters = bookData.items
         content = .m3u8(m3u8URL)
         genre = try document.select("a.section__title").map { try $0.text() }
+        if let seriesRaw = try document.select("a.link__series").map({ try $0.text() }).first, let result = seriesRaw.firstMatch(of: /(?<name>\w+) \((?<number>\d+)\)/) {
+            series = BookSeries(
+                name: String(result.name),
+                number: Int(result.number) ?? 0
+            )
+        } else {
+            series = nil
+        }
         self.bookUrl = bookUrl
     }
 }

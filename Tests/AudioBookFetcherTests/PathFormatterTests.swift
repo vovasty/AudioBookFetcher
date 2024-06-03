@@ -10,6 +10,7 @@ private struct TestAudioBook: AudioBook {
     var content: AudioBookFetcher.AudioBookContent
     var bookUrl: URL
     var genre: [String]
+    var series: AudioBookFetcher.BookSeries?
 }
 
 final class PathFormatterTests: XCTestCase {
