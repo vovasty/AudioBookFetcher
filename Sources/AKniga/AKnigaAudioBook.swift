@@ -46,6 +46,7 @@ struct AKnigaAudioBook: AudioBook {
     let chapters: [BookChapter]
     let content: AudioBookContent
     let bookUrl: URL
+    let genre: [String]
 
     init(bookUrl: URL, html: String, bookDataResponse: String, m3u8URL: URL) throws {
         guard let bookDataResponseData = bookDataResponse.data(using: .utf8) else {
@@ -74,6 +75,7 @@ struct AKnigaAudioBook: AudioBook {
         description = try document.select("[itemprop=\"description\"]").map { try $0.text() }.joined(separator: "\n")
         chapters = bookData.items
         content = .m3u8(m3u8URL)
+        genre = try document.select("a.section__title").map { try $0.text() }
         self.bookUrl = bookUrl
     }
 }

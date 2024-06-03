@@ -9,12 +9,13 @@ final class AKnigaTests: XCTestCase {
         let jsonDdata = try Data(contentsOf: jsonURL)
         let html = try XCTUnwrap(String(data: htmlData, encoding: .utf8))
         let bookDataResponse = try XCTUnwrap(String(data: jsonDdata, encoding: .utf8))
-        let parsed = try AKnigaAudioBook(html: html, bookDataResponse: bookDataResponse, m3u8URL: URL(fileURLWithPath: "file://test"))
+        let parsed = try AKnigaAudioBook(bookUrl: URL(fileURLWithPath: "file://test"), html: html, bookDataResponse: bookDataResponse, m3u8URL: URL(fileURLWithPath: "file://test"))
         XCTAssertEqual(parsed.title, "Глубина. Погружение 56-е")
         XCTAssertFalse(parsed.authors.isEmpty)
         XCTAssertFalse(parsed.description.isEmpty)
         XCTAssertFalse(parsed.chapters.isEmpty)
         XCTAssertEqual(parsed.coverURL, URL(string: "https://akniga.org/uploads/media/topic/2024/05/31/08/preview/fe35b1daf43cc19fae7c_400x.jpg"))
+        XCTAssertEqual(parsed.genre, ["Ужасы, мистика", "Роман, проза"])
     }
 
     func testLoad() {

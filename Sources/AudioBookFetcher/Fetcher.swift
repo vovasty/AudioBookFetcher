@@ -16,6 +16,7 @@ public protocol AudioBook {
     var coverURL: URL { get }
     var content: AudioBookContent { get }
     var bookUrl: URL { get }
+    var genre: [String] { get }
 }
 
 public enum AudioBookContent {
@@ -127,9 +128,10 @@ public struct Fetcher {
 
         buf.append("title=\(book.title.max(metadataMax))")
         buf.append("album=\(book.title.max(metadataMax))")
-        buf.append("description=\(book.description.max(metadataMax).replacingOccurrences(of: "\n", with: "\\n"))")
-        buf.append("synopsis=\(book.description.max(metadataMax).replacingOccurrences(of: "\n", with: "\\n"))")
-        buf.append("comment=\(book.bookUrl.absoluteString)")
+        buf.append("description=\(book.description.replacingOccurrences(of: "\n", with: "\\n").max(metadataMax))")
+        buf.append("synopsis=\(book.description.replacingOccurrences(of: "\n", with: "\\n").max(metadataMax))")
+        buf.append("comment=\(book.bookUrl.absoluteString.max(metadataMax))")
+        buf.append("genre=\(book.genre.joined(separator: ";").max(metadataMax))")
 
         for chapter in book.chapters {
             buf.append("[CHAPTER]")
