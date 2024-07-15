@@ -153,7 +153,6 @@ public struct Fetcher {
 
         for chapter in book.chapters {
             buf.append("[CHAPTER]")
-            buf.append("TIMEBASE=1/1000")
             buf.append("START=\(chapter.start)")
             buf.append("END=\(chapter.end)")
             if let title = chapter.title {

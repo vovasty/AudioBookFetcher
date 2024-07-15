@@ -14,8 +14,8 @@ typealias BookDataResponse = [String: BookData]
 struct BookData: Decodable {
     public struct Item: Decodable {
         let title: String?
-        let time_finish: Int
-        let time_from_start: Int
+        var time_finish: Int
+        var time_from_start: Int
     }
 
     let items: [Item]
@@ -74,7 +74,12 @@ struct AKnigaAudioBook: AudioBook {
         self.m3u8URL = m3u8URL
         authors = try document.select("[itemprop=\"author\"]").map { try $0.text() }
         description = try document.select("[itemprop=\"description\"]").map { try $0.text() }.joined(separator: "\n")
-        chapters = bookData.items
+        chapters = bookData.items.map { chapter in
+            var chapter = chapter
+            chapter.time_finish *= 1000000000
+            chapter.time_from_start *= 1000000000
+            return chapter
+        }
         content = .m3u8(m3u8URL)
         genre = try document.select("a.section__title").map { try $0.text() }
         if let seriesRaw = try document.select("a.link__series").map({ try $0.text() }).first, let result = seriesRaw.firstMatch(of: /(?<name>\w+) \((?<number>\d+)\)/) {
