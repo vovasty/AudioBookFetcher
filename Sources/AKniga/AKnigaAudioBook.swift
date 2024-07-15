@@ -56,8 +56,8 @@ extension AudioBook {
         let chapters = bookData.items.map {
             Chapter(
                 title: $0.title,
-                start: $0.time_finish * 1_000_000_000,
-                end: $0.time_from_start * 1_000_000_000
+                start: $0.time_from_start * 1_000_000_000,
+                end: $0.time_finish * 1_000_000_000
             )
         }
         let content = Content.m3u8(m3u8URL)
