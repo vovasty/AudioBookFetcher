@@ -52,7 +52,7 @@ public struct AKnigaLoader: AudioBookLoader {
     public init() {}
 
     @MainActor
-    public func load(url: URL) async throws -> any AudioBookFetcher.AudioBook {
+    public func load(url: URL) async throws -> AudioBookFetcher.AudioBook {
         let m3u8UrlSubject = CurrentValueSubject<URL?, Never>(nil)
         let config = WKWebViewConfiguration.interceptable { response in
             guard let url = response.url else { return }
@@ -83,6 +83,6 @@ public struct AKnigaLoader: AudioBookLoader {
             throw AKnigaLoaderError.noM3u8Url
         }
 
-        return try AKnigaAudioBook(bookUrl: url, html: html, bookDataResponse: bookDataResponse, m3u8URL: m3u8Url)
+        return try AudioBook(bookUrl: url, html: html, bookDataResponse: bookDataResponse, m3u8URL: m3u8Url)
     }
 }

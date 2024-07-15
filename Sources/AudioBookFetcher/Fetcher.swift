@@ -2,36 +2,53 @@ import Combine
 import Foundation
 import Logging
 
-public struct BookSeries: Hashable {
-    public let name: String
-    public let number: Int
-
-    public init(name: String, number: Int) {
-        self.name = name
-        self.number = number
+public struct AudioBook: Sendable {
+    public struct Chapter: Sendable {
+        public var title: String?
+        public var start: Int
+        public var end: Int
+        public init(title: String? = nil, start: Int, end: Int) {
+            self.title = title
+            self.start = start
+            self.end = end
+        }
     }
-}
 
-public protocol BookChapter {
-    var title: String? { get }
-    var start: Int { get }
-    var end: Int { get }
-}
+    public struct Series: Sendable & Hashable {
+        public let name: String
+        public let number: Int
 
-public protocol AudioBook {
-    var title: String { get }
-    var authors: [String] { get }
-    var description: String { get }
-    var chapters: [BookChapter] { get }
-    var coverURL: URL { get }
-    var content: AudioBookContent { get }
-    var bookUrl: URL { get }
-    var genre: [String] { get }
-    var series: BookSeries? { get }
-}
+        public init(name: String, number: Int) {
+            self.name = name
+            self.number = number
+        }
+    }
 
-public enum AudioBookContent {
-    case m3u8(URL)
+    public enum Content: Sendable {
+        case m3u8(URL)
+    }
+
+    public var title: String
+    public var authors: [String]
+    public var description: String
+    public var chapters: [Chapter]
+    public var coverURL: URL
+    public var content: Content
+    public var bookUrl: URL
+    public var genre: [String]
+    public var series: Series?
+
+    public init(title: String, authors: [String], description: String, chapters: [AudioBook.Chapter], coverURL: URL, content: AudioBook.Content, bookUrl: URL, genre: [String], series: AudioBook.Series?) {
+        self.title = title
+        self.authors = authors
+        self.description = description
+        self.chapters = chapters
+        self.coverURL = coverURL
+        self.content = content
+        self.bookUrl = bookUrl
+        self.genre = genre
+        self.series = series
+    }
 }
 
 public protocol AudioBookLoader {
@@ -191,7 +208,7 @@ public struct Fetcher {
         try fm.removeItem(at: tmpDownloaded)
     }
 
-    private func fetchContent(content: AudioBookContent, output: URL) async throws {
+    private func fetchContent(content: AudioBook.Content, output: URL) async throws {
         switch content {
         case let .m3u8(url):
             let cmd = [

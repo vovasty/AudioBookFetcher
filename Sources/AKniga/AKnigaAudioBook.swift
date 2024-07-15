@@ -23,31 +23,10 @@ struct BookData: Decodable {
     let titleonly: String
 }
 
-extension BookData.Item: BookChapter {
-    var start: Int {
-        time_from_start
-    }
-
-    var end: Int {
-        time_finish
-    }
-}
-
-struct AKnigaAudioBook: AudioBook {
+extension AudioBook {
     enum AKnigaAudioBookError: Swift.Error {
         case noResponse, noBookData
     }
-
-    private let m3u8URL: URL
-    let coverURL: URL
-    let title: String
-    let authors: [String]
-    let description: String
-    let chapters: [BookChapter]
-    let content: AudioBookContent
-    let bookUrl: URL
-    let genre: [String]
-    let series: BookSeries?
 
     init(bookUrl: URL, html: String, bookDataResponse: String, m3u8URL: URL) throws {
         guard let bookDataResponseData = bookDataResponse.data(using: .utf8) else {
@@ -60,36 +39,48 @@ struct AKnigaAudioBook: AudioBook {
 
         let document = try SwiftSoup.parse(html)
 
-        if let sCoverURL = try document
+        let coverURL = if let sCoverURL = try document
             .select("img.loaded")
             .compactMap({ $0.getAttributes() })
             .map({ $0.get(key: "src") })
             .first, let url = URL(string: sCoverURL)
         {
-            coverURL = url
+            url
         } else {
-            coverURL = bookData.preview
+            bookData.preview
         }
-        title = bookData.titleonly.trimmingCharacters(in: .whitespacesAndNewlines)
-        self.m3u8URL = m3u8URL
-        authors = try document.select("[itemprop=\"author\"]").map { try $0.text() }
-        description = try document.select("[itemprop=\"description\"]").map { try $0.text() }.joined(separator: "\n")
-        chapters = bookData.items.map { chapter in
-            var chapter = chapter
-            chapter.time_finish *= 1000000000
-            chapter.time_from_start *= 1000000000
-            return chapter
+
+        let title = bookData.titleonly.trimmingCharacters(in: .whitespacesAndNewlines)
+        let authors = try document.select("[itemprop=\"author\"]").map { try $0.text() }
+        let description = try document.select("[itemprop=\"description\"]").map { try $0.text() }.joined(separator: "\n")
+        let chapters = bookData.items.map {
+            Chapter(
+                title: $0.title,
+                start: $0.time_finish * 1_000_000_000,
+                end: $0.time_from_start * 1_000_000_000
+            )
         }
-        content = .m3u8(m3u8URL)
-        genre = try document.select("a.section__title").map { try $0.text() }
-        if let seriesRaw = try document.select("a.link__series").map({ try $0.text() }).first, let result = seriesRaw.firstMatch(of: /(?<name>\w+) \((?<number>\d+)\)/) {
-            series = BookSeries(
+        let content = Content.m3u8(m3u8URL)
+        let genre = try document.select("a.section__title").map { try $0.text() }
+        let series: Series? = if let seriesRaw = try document.select("a.link__series").map({ try $0.text() }).first, let result = seriesRaw.firstMatch(of: /(?<name>\w+) \((?<number>\d+)\)/) {
+            Series(
                 name: String(result.name),
                 number: Int(result.number) ?? 0
             )
         } else {
-            series = nil
+            nil
         }
-        self.bookUrl = bookUrl
+
+        self.init(
+            title: title,
+            authors: authors,
+            description: description,
+            chapters: chapters,
+            coverURL: coverURL,
+            content: content,
+            bookUrl: bookUrl,
+            genre: genre,
+            series: series
+        )
     }
 }
