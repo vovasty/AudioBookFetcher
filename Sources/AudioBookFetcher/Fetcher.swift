@@ -51,18 +51,17 @@ public struct AudioBook: Sendable {
     }
 }
 
-public protocol AudioBookLoader {
+public protocol AudioBookLoader: Sendable {
     func load(url: URL) async throws -> AudioBook
 }
 
-public struct Fetcher {
+public struct Fetcher: Sendable {
     enum Failure: Error {
         case fileExists(String)
     }
 
     let loader: AudioBookLoader
     let handler = ProcessHandler(executableURL: URL(fileURLWithPath: "/bin/sh"), launchPath: "/usr/bin/env")
-    let fm = FileManager()
     let logger = Logger(label: "net.aramzamzam.abookfetcher")
     let session = URLSession(configuration: .default)
     let tempDirectory = URL(filePath: NSTemporaryDirectory()).appending(path: UUID().uuidString)
@@ -73,6 +72,8 @@ public struct Fetcher {
     }
 
     public func load(url: URL, output: String) async throws {
+        let fm = FileManager()
+
         try fm.createDirectory(at: tempDirectory, withIntermediateDirectories: false)
 
         logger.info("fetching descriptor")
@@ -116,6 +117,7 @@ public struct Fetcher {
 
     public func cleanup() {
         logger.debug("removing \(tempDirectory.path(percentEncoded: false))")
+        let fm = FileManager()
         try? fm.removeItem(at: tempDirectory)
     }
 
@@ -205,6 +207,7 @@ public struct Fetcher {
             output.absoluteString,
         ]
         try await run(cmd)
+        let fm = FileManager()
         try fm.removeItem(at: tmpDownloaded)
     }
 

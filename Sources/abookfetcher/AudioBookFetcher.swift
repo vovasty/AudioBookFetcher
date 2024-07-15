@@ -26,9 +26,15 @@ struct ABookFetcher: AsyncParsableCommand {
     @Flag(help: "verbse output")
     var verbose = false
 
+    enum CodingKeys: String, CodingKey {
+        case url, path, verbose
+    }
+
+    var sigintSrc: DispatchSourceSignal?
+
     mutating func run() async throws {
         guard let url = URL(string: url) else { throw Error.invalidURL }
-        let sigintSrc = setupSignalHandler()
+        sigintSrc = setupSignalHandler()
         setupLogger(verbose ? .debug : .info)
         let fetcher = Fetcher(loader: AKnigaLoader())
         do {

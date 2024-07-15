@@ -12,7 +12,7 @@ enum UtilError {
     case timeout
 }
 
-func with<T>(timeout: Double, closure: @escaping () async throws -> T) async throws -> T {
+func with<T>(timeout: Double, closure: @escaping @Sendable () async throws -> T) async throws -> T {
     let subject = PassthroughSubject<T, Error>()
 
     let task = Task {

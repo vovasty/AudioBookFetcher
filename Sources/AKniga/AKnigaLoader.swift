@@ -24,7 +24,7 @@ private final class WebView: NSObject, WKNavigationDelegate {
     }
 
     func load(_ url: URL) async throws {
-        await webView.load(URLRequest(url: url))
+        webView.load(URLRequest(url: url))
         for try await finished in subject.values {
             guard finished else { continue }
             break
