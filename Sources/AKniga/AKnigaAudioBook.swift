@@ -53,6 +53,7 @@ extension AudioBook {
         let title = bookData.titleonly.trimmingCharacters(in: .whitespacesAndNewlines)
         let authors = try document.select("[itemprop=\"author\"]").map { try $0.text() }
         let description = try document.select("[itemprop=\"description\"]").map { try $0.text() }.joined(separator: "\n")
+        let performers = try document.select("[rel=\"performer\"]").map { try $0.text().trimmingCharacters(in: .whitespaces) }
         let chapters = bookData.items.map {
             Chapter(
                 title: $0.title,
@@ -80,7 +81,8 @@ extension AudioBook {
             content: content,
             bookUrl: bookUrl,
             genre: genre,
-            series: series
+            series: series,
+            performers: performers
         )
     }
 }

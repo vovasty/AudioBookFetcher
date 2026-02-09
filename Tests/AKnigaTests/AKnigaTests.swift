@@ -19,6 +19,7 @@ final class AKnigaTests: XCTestCase {
         XCTAssertEqual(parsed.genre, ["Ужасы, мистика", "Роман, проза"])
         XCTAssertFalse(parsed.chapters.isEmpty)
         XCTAssertEqual(parsed.series, AudioBook.Series(name: "Глубина", number: 56))
+        XCTAssertEqual(parsed.performers, ["Игнатьев Дмитрий (digig)", "Дик Алексей", "Овуор Владимир", "Волков Роман", "Чернобельский Вадим", "Шаклеина Светлана", "Ломакин Павел", "Князев Владимир", "Гуржий Юрий", "Панков Роман", "Булдаков Олег", "Головин Кирилл"])
     }
 
     func testLoad() {
@@ -26,7 +27,7 @@ final class AKnigaTests: XCTestCase {
         let loader = AKnigaLoader()
         Task {
             do {
-                _ = try await loader.load(url: URL(string: "https://akniga.org/shekli-robert-zachem")!)
+                _ = try await loader.load(url: URL(string: "https://akniga.org/glubina-pogruzhenie-56-e")!)
             } catch {
                 XCTFail("unable to load \(error)")
             }

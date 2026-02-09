@@ -37,8 +37,9 @@ public struct AudioBook: Sendable {
     public var bookUrl: URL
     public var genre: [String]
     public var series: Series?
+    public var performers: [String]
 
-    public init(title: String, authors: [String], description: String, chapters: [AudioBook.Chapter], coverURL: URL, content: AudioBook.Content, bookUrl: URL, genre: [String], series: AudioBook.Series?) {
+    public init(title: String, authors: [String], description: String, chapters: [AudioBook.Chapter], coverURL: URL, content: AudioBook.Content, bookUrl: URL, genre: [String], series: AudioBook.Series?, performers: [String]) {
         self.title = title
         self.authors = authors
         self.description = description
@@ -48,6 +49,7 @@ public struct AudioBook: Sendable {
         self.bookUrl = bookUrl
         self.genre = genre
         self.series = series
+        self.performers = performers
     }
 }
 
@@ -164,6 +166,9 @@ public struct Fetcher: Sendable {
         buf.append("synopsis=\(book.description.replacingOccurrences(of: "\n", with: "\\n").max(metadataMax))")
         buf.append("comment=\(book.bookUrl.absoluteString.max(metadataMax))")
         buf.append("genre=\(book.genre.joined(separator: ";").max(metadataMax))")
+        if let performer = book.performers.first {
+            buf.append("composer=\(performer.max(metadataMax))")
+        }
 
         if let series = book.series {
             buf.append("grouping=\(series.name.max(metadataMax))")

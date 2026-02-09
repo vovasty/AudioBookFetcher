@@ -20,6 +20,7 @@ struct PathFormatter {
         let dict = [
             "@author": book.authors.first ?? "Unknown author",
             "@title": book.title,
+            "@narrator": book.performers.first ?? "",
         ]
 
         let path = dict.reduce(base) {
