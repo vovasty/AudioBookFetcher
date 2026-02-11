@@ -73,13 +73,13 @@ public struct Fetcher: Sendable {
         self.loader = loader
     }
 
-    public func load(url: URL, output: String) async throws {
+    public func load(url: URL, output: String, timeout: TimeInterval) async throws {
         let fm = FileManager()
 
         try fm.createDirectory(at: tempDirectory, withIntermediateDirectories: false)
 
         logger.info("fetching descriptor")
-        let book = try await with(timeout: 10) {
+        let book = try await with(timeout: timeout) {
             try await loader.load(url: url)
         }
 

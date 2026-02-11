@@ -26,8 +26,11 @@ struct ABookFetcher: AsyncParsableCommand {
     @Flag(help: "verbse output")
     var verbose = false
 
+    @Option(help: "network timeout")
+    var timeout: TimeInterval = 120
+
     enum CodingKeys: String, CodingKey {
-        case url, path, verbose
+        case url, path, verbose, timeout
     }
 
     var sigintSrc: DispatchSourceSignal?
@@ -38,7 +41,7 @@ struct ABookFetcher: AsyncParsableCommand {
         setupLogger(verbose ? .debug : .info)
         let fetcher = Fetcher(loader: AKnigaLoader())
         do {
-            try await fetcher.load(url: url, output: path)
+            try await fetcher.load(url: url, output: path, timeout: timeout)
             fetcher.cleanup()
         } catch {
             fetcher.cleanup()
