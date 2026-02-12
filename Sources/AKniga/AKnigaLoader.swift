@@ -8,9 +8,9 @@
 import AudioBookFetcher
 @preconcurrency import Combine
 import Foundation
+import Logging
 import WebKit
 import WebViewSniffer
-import Logging
 
 private final class WebView: NSObject, WKNavigationDelegate {
     private let subject = CurrentValueSubject<Bool, Error>(false)
@@ -31,7 +31,7 @@ private final class WebView: NSObject, WKNavigationDelegate {
         }
     }
 
-    public func webView(_: WKWebView, didFinish _: WKNavigation!) {
+    func webView(_: WKWebView, didFinish _: WKNavigation!) {
         subject.send(completion: .finished)
     }
 
@@ -48,7 +48,7 @@ public struct AKnigaLoader: AudioBookLoader {
     public enum AKnigaLoaderError: Swift.Error {
         case noData, noHTML, noM3u8Url
     }
-    
+
     private let logger = Logger(label: "net.aramzamzam.abookfetcher")
 
     public init() {}
@@ -66,7 +66,7 @@ public struct AKnigaLoader: AudioBookLoader {
         let webView = WebView(config: config)
 
         logger.info("Loading \(url)")
-        
+
         try await webView.load(url)
 
         guard let bookDataResponse = try await webView.webView.evaluateJavaScript("JSON.stringify(bookData)") as? String else {

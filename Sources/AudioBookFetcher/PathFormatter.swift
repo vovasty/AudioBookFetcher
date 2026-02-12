@@ -11,11 +11,6 @@ struct PathFormatter {
     let base: String
     let book: AudioBook
 
-    init(base: String, book: AudioBook) {
-        self.base = base
-        self.book = book
-    }
-
     var path: URL {
         let dict = [
             "@author": book.authors.first ?? "Unknown author",

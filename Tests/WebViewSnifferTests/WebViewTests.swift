@@ -10,7 +10,7 @@ import WebViewSniffer
 import XCTest
 
 final class WebViewTests: XCTestCase {
-    func testWebView() {
+    func testWebView() throws {
         let e = expectation(description: "wait")
 
         let config = WKWebViewConfiguration.interceptable { response in
@@ -22,7 +22,7 @@ final class WebViewTests: XCTestCase {
         config.websiteDataStore = WKWebsiteDataStore.nonPersistent()
 
         let webView = WKWebView(frame: .zero, configuration: config)
-        webView.load(URLRequest(url: URL(string: "https://google.com")!))
+        try webView.load(URLRequest(url: XCTUnwrap(URL(string: "https://google.com"))))
 
         waitForExpectations(timeout: 10)
     }

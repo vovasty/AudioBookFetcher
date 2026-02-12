@@ -8,7 +8,7 @@
 import Combine
 import Foundation
 
-// https://forums.swift.org/t/running-an-async-task-with-a-timeout/49733/21
+/// https://forums.swift.org/t/running-an-async-task-with-a-timeout/49733/21
 public enum Waiter {
     public struct TimeoutError: Error {}
 
@@ -16,9 +16,9 @@ public enum Waiter {
         for duration: C.Instant.Duration,
         tolerance: C.Instant.Duration? = nil,
         clock: C = .continuous,
-        _ task: @escaping @Sendable () async throws -> R
+        _ task: @escaping @Sendable () async throws -> R,
     ) async throws -> R {
-        return try await withThrowingTaskGroup(of: R.self) { group in
+        try await withThrowingTaskGroup(of: R.self) { group in
             await withUnsafeContinuation { continuation in
                 group.addTask {
                     continuation.resume()

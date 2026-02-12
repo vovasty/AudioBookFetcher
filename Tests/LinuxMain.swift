@@ -1,6 +1,5 @@
-import XCTest
-
 import AudioBookFetcherTests
+import XCTest
 
 var tests = [XCTestCaseEntry]()
 tests += AudioBookFetcherTests.allTests()

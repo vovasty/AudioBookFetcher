@@ -1,4 +1,4 @@
-// swift-tools-version:5.10
+// swift-tools-version:6.2
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -11,19 +11,19 @@ let package = Package(
     products: [
         .library(
             name: "AKniga",
-            targets: ["AKniga"]
+            targets: ["AKniga"],
         ),
         .library(
             name: "AudioBookFetcher",
-            targets: ["AudioBookFetcher"]
+            targets: ["AudioBookFetcher"],
         ),
         .library(
             name: "WebViewSniffer",
-            targets: ["WebViewSniffer"]
+            targets: ["WebViewSniffer"],
         ),
         .library(
             name: "SSWKURL",
-            targets: ["SSWKURL"]
+            targets: ["SSWKURL"],
         ),
     ],
     dependencies: [
@@ -39,13 +39,13 @@ let package = Package(
                 "AKniga",
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 .product(name: "Logging", package: "swift-log"),
-            ]
+            ],
         ),
         .target(
             name: "AudioBookFetcher",
             dependencies: [
                 .product(name: "Logging", package: "swift-log"),
-            ]
+            ],
         ),
         .target(
             name: "AKniga",
@@ -53,37 +53,37 @@ let package = Package(
                 "WebViewSniffer",
                 "SwiftSoup",
                 "AudioBookFetcher",
-            ]
+            ],
         ),
         .testTarget(
             name: "AudioBookFetcherTests",
-            dependencies: ["AudioBookFetcher"]
+            dependencies: ["AudioBookFetcher"],
         ),
         .testTarget(
             name: "AKnigaTests",
             dependencies: ["AKniga", "AudioBookFetcher"],
-            resources: [Resource.copy("Resources")]
+            resources: [Resource.copy("Resources")],
         ),
         .target(
             name: "WebViewSniffer",
             dependencies: [
                 "SSWKURL",
-            ]
+            ],
         ),
 
         .testTarget(
             name: "WebViewSnifferTests",
             dependencies: [
                 "WebViewSniffer",
-            ]
+            ],
         ),
 
         .target(
             name: "SSWKURL",
             dependencies: [
-            ]
+            ],
         ),
-    ]
+    ],
 )
 
 for target in package.targets {
@@ -93,6 +93,6 @@ for target in package.targets {
             "-Xfrontend", "-warn-concurrency",
             "-Xfrontend", "-enable-actor-data-race-checks",
             "-enable-bare-slash-regex",
-        ])
+        ]),
     )
 }

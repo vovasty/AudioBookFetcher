@@ -12,7 +12,7 @@ import SwiftSoup
 typealias BookDataResponse = [String: BookData]
 
 struct BookData: Decodable {
-    public struct Item: Decodable {
+    struct Item: Decodable {
         let title: String?
         var time_finish: Int
         var time_from_start: Int
@@ -58,7 +58,7 @@ extension AudioBook {
             Chapter(
                 title: $0.title,
                 start: $0.time_from_start * 1_000_000_000,
-                end: $0.time_finish * 1_000_000_000
+                end: $0.time_finish * 1_000_000_000,
             )
         }
         let content = Content.m3u8(m3u8URL)
@@ -66,7 +66,7 @@ extension AudioBook {
         let series: Series? = if let seriesRaw = try document.select("a.link__series").map({ try $0.text() }).first, let result = seriesRaw.firstMatch(of: /(?<name>\w+) \((?<number>\d+)\)/) {
             Series(
                 name: String(result.name),
-                number: Int(result.number) ?? 0
+                number: Int(result.number) ?? 0,
             )
         } else {
             nil
@@ -82,7 +82,7 @@ extension AudioBook {
             bookUrl: bookUrl,
             genre: genre,
             series: series,
-            performers: performers
+            performers: performers,
         )
     }
 }

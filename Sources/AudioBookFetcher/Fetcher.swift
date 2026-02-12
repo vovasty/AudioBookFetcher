@@ -96,13 +96,13 @@ public struct Fetcher: Sendable {
         let media = tempDirectory.appending(path: "fetched.m4b")
         try await fetchContent(
             content: book.content,
-            output: media
+            output: media,
         )
         logger.info("fetching cover")
         let cover = tempDirectory.appending(path: "cover.png")
         try await fetchCover(
             url: book.coverURL,
-            output: cover
+            output: cover,
         )
 
         logger.info("assembling")
@@ -111,7 +111,7 @@ public struct Fetcher: Sendable {
             media: media,
             cover: cover,
             metadata: metadata,
-            output: output
+            output: output,
         )
         logger.info("completed")
     }
@@ -188,7 +188,7 @@ public struct Fetcher: Sendable {
             .write(
                 to: output,
                 atomically: false,
-                encoding: .utf8
+                encoding: .utf8,
             )
     }
 
