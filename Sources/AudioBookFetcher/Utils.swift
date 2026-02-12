@@ -8,41 +8,37 @@
 import Combine
 import Foundation
 
-enum UtilError {
-    case timeout
+// https://forums.swift.org/t/running-an-async-task-with-a-timeout/49733/21
+public enum Waiter {
+    public struct TimeoutError: Error {}
+
+    public static func wait<R: Sendable, C: Clock>(
+        for duration: C.Instant.Duration,
+        tolerance: C.Instant.Duration? = nil,
+        clock: C = .continuous,
+        _ task: @escaping @Sendable () async throws -> R
+    ) async throws -> R {
+        return try await withThrowingTaskGroup(of: R.self) { group in
+            await withUnsafeContinuation { continuation in
+                group.addTask {
+                    continuation.resume()
+                    return try await task()
+                }
+            }
+            group.addTask {
+                await Task.yield()
+                try await Task.sleep(for: duration, tolerance: tolerance, clock: clock)
+                throw TimeoutError()
+            }
+            defer { group.cancelAll() }
+            return try await group.next()!
+        }
+    }
 }
 
-func with<T>(timeout: Double, closure: @escaping @Sendable () async throws -> T) async throws -> T {
-    let subject = PassthroughSubject<T, Error>()
-
-    let task = Task {
-        let value = try await closure()
-        subject.send(value)
-    }
-
-    do {
-        let value = try await subject
-            .timeout(.seconds(timeout), scheduler: DispatchQueue.main)
-            .values
-            .first { _ in true }
-
-        guard let value else {
-            throw UtilError.timeout
-        }
-
-        return value
-    } catch {
-        task.cancel()
-        throw error
-    }
-}
-
-extension UtilError: LocalizedError {
-    var errorDescription: String? {
-        switch self {
-        case .timeout:
-            "Timeout"
-        }
+extension Waiter.TimeoutError: LocalizedError {
+    public var errorDescription: String? {
+        "Timeout"
     }
 }
 

@@ -78,7 +78,7 @@ public struct Fetcher: Sendable {
         try fm.createDirectory(at: tempDirectory, withIntermediateDirectories: false)
 
         logger.info("fetching descriptor")
-        let book = try await with(timeout: timeout) {
+        let book = try await Waiter.wait(for: .seconds(timeout)) {
             try await loader.load(url: url)
         }
 
