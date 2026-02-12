@@ -17,7 +17,6 @@ private final class WebView: NSObject, WKNavigationDelegate {
 
     init(config: WKWebViewConfiguration) {
         webView = WKWebView(frame: .zero, configuration: config)
-        config.processPool = WKProcessPool()
         config.websiteDataStore = WKWebsiteDataStore.nonPersistent()
         super.init()
         webView.navigationDelegate = self
