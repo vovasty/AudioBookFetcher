@@ -45,7 +45,7 @@ private final class WebView: NSObject, WKNavigationDelegate {
 }
 
 public struct AKnigaLoader: AudioBookLoader {
-    public enum AKnigaLoaderError: Swift.Error {
+    public enum Failure: Swift.Error {
         case noData, noHTML, noM3u8Url
     }
 
@@ -69,38 +69,42 @@ public struct AKnigaLoader: AudioBookLoader {
 
         try await webView.load(url)
 
-        guard let bookDataResponse = try await webView.webView.evaluateJavaScript("JSON.stringify(bookData)") as? String else {
-            throw AKnigaLoaderError.noData
+        logger.info("Getting m3u8 url")
+
+        let m3u8Url = try await Waiter.loop(3, errors: [Waiter.TimeoutError.self]) { @MainActor counter in
+            if counter > 0 {
+                logger.info("Retrying m3u8 url...")
+                webView.webView.reload()
+            }
+            return try await Waiter.wait(for: .seconds(30)) {
+                for try await m3u8 in m3u8UrlSubject.values {
+                    guard let m3u8 else { continue }
+                    return m3u8
+                }
+                throw Failure.noM3u8Url
+            }
+        }
+
+        logger.info("Getting bookData")
+        let bookDataResponse = try await Waiter.loop(3, errors: [Failure.self]) { @MainActor counter in
+            if counter > 0 {
+                logger.info("Retrying bookData...")
+                try await Task.sleep(for: .seconds(1))
+            }
+            guard let bookDataResponse = try await webView.webView.evaluateJavaScript("JSON.stringify(bookData)") as? String else {
+                throw Failure.noData
+            }
+
+            guard bookDataResponse.count > 100 else {
+                throw Failure.noData
+            }
+
+            return bookDataResponse
         }
 
         logger.info("Getting html")
         guard let html = try await webView.webView.evaluateJavaScript("document.documentElement.outerHTML.toString()") as? String else {
-            throw AKnigaLoaderError.noHTML
-        }
-
-        var m3u8Url: URL?
-        var maxRetries = 3
-        logger.info("Getting m3u8 url")
-        while true {
-            do {
-                m3u8Url = try await Waiter.wait(for: .seconds(30)) {
-                    for try await m3u8 in m3u8UrlSubject.values {
-                        guard let m3u8 else { continue }
-                        return m3u8
-                    }
-                    return nil
-                }
-                break
-            } catch let error as Waiter.TimeoutError {
-                maxRetries -= 1
-                guard maxRetries != 0 else { throw error }
-                logger.info("Retrying m3u8 url...")
-                webView.webView.reload()
-            }
-        }
-
-        guard let m3u8Url else {
-            throw AKnigaLoaderError.noM3u8Url
+            throw Failure.noHTML
         }
 
         return try AudioBook(bookUrl: url, html: html, bookDataResponse: bookDataResponse, m3u8URL: m3u8Url)

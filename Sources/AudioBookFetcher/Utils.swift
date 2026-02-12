@@ -11,6 +11,7 @@ import Foundation
 /// https://forums.swift.org/t/running-an-async-task-with-a-timeout/49733/21
 public enum Waiter {
     public struct TimeoutError: Error {}
+    public struct LoopError: Error {}
 
     public static func wait<R: Sendable, C: Clock>(
         for duration: C.Instant.Duration,
@@ -33,6 +34,22 @@ public enum Waiter {
             defer { group.cancelAll() }
             return try await group.next()!
         }
+    }
+
+    public static func loop<R: Sendable>(_ times: Int, errors: [Error.Type], handler: @Sendable (Int) async throws -> R) async throws -> R {
+        var counter = 0
+        while counter != times {
+            do {
+                return try await handler(counter)
+            } catch {
+                if errors.contains(where: { err in
+                    type(of: err) == type(of: error)
+                }) {
+                    counter += 1
+                }
+            }
+        }
+        throw LoopError()
     }
 }
 
