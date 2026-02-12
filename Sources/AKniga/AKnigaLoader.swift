@@ -6,10 +6,11 @@
 //
 
 import AudioBookFetcher
-import Combine
+@preconcurrency import Combine
 import Foundation
 import WebKit
 import WebViewSniffer
+import Logging
 
 private final class WebView: NSObject, WKNavigationDelegate {
     private let subject = CurrentValueSubject<Bool, Error>(false)
@@ -47,6 +48,8 @@ public struct AKnigaLoader: AudioBookLoader {
     public enum AKnigaLoaderError: Swift.Error {
         case noData, noHTML, noM3u8Url
     }
+    
+    private let logger = Logger(label: "net.aramzamzam.abookfetcher")
 
     public init() {}
 
@@ -55,27 +58,45 @@ public struct AKnigaLoader: AudioBookLoader {
         let m3u8UrlSubject = CurrentValueSubject<URL?, Never>(nil)
         let config = WKWebViewConfiguration.interceptable { response in
             guard let url = response.url else { return }
+            logger.debug("got \(url)")
             guard url.pathExtension == "m3u8" else { return }
             m3u8UrlSubject.send(url)
         }
 
         let webView = WebView(config: config)
 
+        logger.info("Loading \(url)")
+        
         try await webView.load(url)
 
         guard let bookDataResponse = try await webView.webView.evaluateJavaScript("JSON.stringify(bookData)") as? String else {
             throw AKnigaLoaderError.noData
         }
 
+        logger.info("Getting html")
         guard let html = try await webView.webView.evaluateJavaScript("document.documentElement.outerHTML.toString()") as? String else {
             throw AKnigaLoaderError.noHTML
         }
 
         var m3u8Url: URL?
-        for try await m3u8 in m3u8UrlSubject.values {
-            guard let m3u8 else { continue }
-            m3u8Url = m3u8
-            break
+        var maxRetries = 3
+        logger.info("Getting m3u8 url")
+        while true {
+            do {
+                m3u8Url = try await Waiter.wait(for: .seconds(30)) {
+                    for try await m3u8 in m3u8UrlSubject.values {
+                        guard let m3u8 else { continue }
+                        return m3u8
+                    }
+                    return nil
+                }
+                break
+            } catch let error as Waiter.TimeoutError {
+                maxRetries -= 1
+                guard maxRetries != 0 else { throw error }
+                logger.info("Retrying m3u8 url...")
+                webView.webView.reload()
+            }
         }
 
         guard let m3u8Url else {
